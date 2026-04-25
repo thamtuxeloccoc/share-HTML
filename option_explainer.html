@@ -1,0 +1,355 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:1rem 0;display:flex;flex-direction:column;gap:14px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem 1.5rem}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:12px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pill{display:inline-block;font-size:11px;padding:2px 9px;border-radius:99px;font-weight:500}
+.stat{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.65rem .9rem}
+.stat-lbl{font-size:10px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
+.stat-val{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.stat-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:1px}
+.slider-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sl-lbl{font-size:13px;color:var(--color-text-secondary);width:110px;flex-shrink:0}
+.sl-val{font-size:13px;font-weight:500;color:var(--color-text-primary);width:56px;text-align:right;flex-shrink:0}
+.profit{color:#0F6E56;font-weight:500}
+.loss{color:#A32D2D;font-weight:500}
+.neutral{color:var(--color-text-secondary)}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.role-card{border-radius:var(--border-radius-md);padding:.85rem 1rem;border:0.5px solid var(--color-border-tertiary)}
+.role-title{font-size:13px;font-weight:500;margin-bottom:4px}
+.role-text{font-size:12px;color:var(--color-text-secondary);line-height:1.5}
+.greeks-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.greek{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.7rem .8rem;text-align:center}
+.greek-sym{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.greek-name{font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px}
+.greek-desc{font-size:11px;color:var(--color-text-secondary);line-height:1.4}
+.deep-btn{width:100%;padding:8px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:transparent;color:var(--color-text-secondary);font-size:13px;cursor:pointer;transition:background .15s;margin-top:12px}
+.deep-btn:hover{background:var(--color-background-secondary)}
+.warn-box{border-radius:var(--border-radius-md);padding:.85rem 1rem;border:0.5px solid #F5C4B3;background:#FAECE710;margin-top:10px}
+.warn-t{font-size:12px;font-weight:500;color:#993C1D;margin-bottom:4px}
+.warn-txt{font-size:12px;color:var(--color-text-secondary);line-height:1.5}
+.type-tabs{display:flex;gap:6px;margin-bottom:12px}
+.type-tab{padding:5px 14px;border-radius:99px;border:0.5px solid var(--color-border-secondary);font-size:12px;cursor:pointer;background:transparent;color:var(--color-text-secondary);transition:all .15s}
+.type-tab.active{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary);font-weight:500}
+</style>
+
+<div class="wrap">
+
+<!-- Part 1: What is an option -->
+<div class="card">
+  <div class="sec">Cấu trúc hợp đồng</div>
+  <div class="role-grid">
+    <div class="role-card" style="border-color:#B5D4F4">
+      <div class="role-title" style="color:#0C447C">Người MUA option (Holder)</div>
+      <div class="role-text">Trả <strong>premium</strong> để mua <em>quyền</em> (không bắt buộc). Có thể chọn thực thi hoặc bỏ qua. Rủi ro giới hạn đúng bằng premium đã trả.</div>
+      <div style="margin-top:8px">
+        <span class="pill" style="background:#E1F5EE;color:#085041">Max loss = premium</span>
+      </div>
+    </div>
+    <div class="role-card" style="border-color:#F5C4B3">
+      <div class="role-title" style="color:#712B13">Người BÁN option (Writer)</div>
+      <div class="role-text">Nhận <strong>premium</strong> nhưng gánh <em>nghĩa vụ</em>. Phải thực thi nếu buyer yêu cầu. Rủi ro không giới hạn (với naked call).</div>
+      <div style="margin-top:8px">
+        <span class="pill" style="background:#FCEBEB;color:#791F1F">Max loss = không giới hạn</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="role-card" style="border-color:#9FE1CB">
+      <div class="role-title" style="color:#0F6E56">Call Option</div>
+      <div class="role-text">Quyền <strong>mua</strong> tài sản ở giá strike. Mua call = kỳ vọng giá tăng. Lời khi giá thị trường > strike + premium.</div>
+    </div>
+    <div class="role-card" style="border-color:#CECBF6">
+      <div class="role-title" style="color:#3C3489">Put Option</div>
+      <div class="role-text">Quyền <strong>bán</strong> tài sản ở giá strike. Mua put = kỳ vọng giá giảm / bảo hiểm danh mục. Lời khi giá thị trường &lt; strike - premium.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Part 2: Interactive PnL -->
+<div class="card">
+  <div class="sec">Mô phỏng lời / lỗ — mua call option</div>
+
+  <div class="type-tabs">
+    <button class="type-tab active" onclick="setType('call',this)">Mua Call</button>
+    <button class="type-tab" onclick="setType('put',this)">Mua Put</button>
+    <button class="type-tab" onclick="setType('sell_call',this)">Bán Call (naked)</button>
+  </div>
+
+  <div class="slider-row">
+    <span class="sl-lbl">Giá strike</span>
+    <input type="range" min="80" max="120" step="1" value="100" id="strike" oninput="calc()" style="flex:1">
+    <span class="sl-val" id="strike-out">$100</span>
+  </div>
+  <div class="slider-row">
+    <span class="sl-lbl">Premium trả</span>
+    <input type="range" min="1" max="20" step="0.5" value="5" id="premium" oninput="calc()" style="flex:1">
+    <span class="sl-val" id="premium-out">$5</span>
+  </div>
+  <div class="slider-row">
+    <span class="sl-lbl">Giá thị trường lúc hết hạn</span>
+    <input type="range" min="60" max="160" step="1" value="110" id="price" oninput="calc()" style="flex:1">
+    <span class="sl-val" id="price-out">$110</span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px" id="stats"></div>
+
+  <canvas id="pnl-chart" height="180" style="width:100%"></canvas>
+
+  <div id="result-box" style="margin-top:10px"></div>
+</div>
+
+<!-- Part 3: Moneyness -->
+<div class="card">
+  <div class="sec">In-the-money / At-the-money / Out-of-the-money</div>
+  <div style="position:relative;height:56px;margin-bottom:14px">
+    <canvas id="money-bar" height="56" style="width:100%"></canvas>
+  </div>
+  <div class="grid2">
+    <div>
+      <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">In-the-money (ITM)</div>
+      <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.5">Thực thi ngay sẽ có lời. Call ITM khi giá thị trường > strike. Có intrinsic value thực sự.</div>
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Out-of-the-money (OTM)</div>
+      <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.5">Thực thi ngay sẽ lỗ — chỉ có time value. OTM options rẻ hơn nhưng cần thị trường di chuyển nhiều hơn.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Part 4: The Greeks -->
+<div class="card">
+  <div class="sec">The Greeks — 4 yếu tố ảnh hưởng giá option</div>
+  <div class="greeks-grid">
+    <div class="greek">
+      <div class="greek-sym" style="color:#185FA5">Δ</div>
+      <div class="greek-name">Delta</div>
+      <div class="greek-desc">Option thay đổi bao nhiêu khi giá tài sản tăng $1. Call: 0→1. Put: -1→0.</div>
+    </div>
+    <div class="greek">
+      <div class="greek-sym" style="color:#A32D2D">Θ</div>
+      <div class="greek-name">Theta</div>
+      <div class="greek-desc">Giá trị option mất đi mỗi ngày khi gần đến hạn. Kẻ thù của người mua option.</div>
+    </div>
+    <div class="greek">
+      <div class="greek-sym" style="color:#0F6E56">Γ</div>
+      <div class="greek-name">Gamma</div>
+      <div class="greek-desc">Tốc độ thay đổi của Delta. Cao gần expiry — option ATM rất nhạy cảm lúc này.</div>
+    </div>
+    <div class="greek">
+      <div class="greek-sym" style="color:#633806">ν</div>
+      <div class="greek-name">Vega</div>
+      <div class="greek-desc">Nhạy cảm với biến động (volatility). IV tăng → giá option tăng dù giá tài sản không đổi.</div>
+    </div>
+  </div>
+  <div class="warn-box">
+    <div class="warn-t">Theta decay — kẻ thù số 1 của người mua option</div>
+    <div class="warn-txt">Mỗi ngày trôi qua, time value của option giảm dần — kể cả khi giá tài sản đứng yên. Gần đến ngày hết hạn, decay tăng theo hàm phi tuyến (đặc biệt mạnh trong 30 ngày cuối). Đây là lý do người bán option có lợi thế thống kê về thời gian.</div>
+  </div>
+  <button class="deep-btn" onclick="sendPrompt('Giải thích chi tiết Theta decay và cách nó ảnh hưởng đến chiến lược mua/bán option theo thời gian ↗')">Giải thích sâu hơn về Theta decay ↗</button>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+let optType = 'call';
+let chart = null;
+
+function setType(t, btn) {
+  optType = t;
+  document.querySelectorAll('.type-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  calc();
+}
+
+function getPnL(price, strike, premium, type) {
+  if (type === 'call') {
+    const intrinsic = Math.max(0, price - strike);
+    return intrinsic - premium;
+  } else if (type === 'put') {
+    const intrinsic = Math.max(0, strike - price);
+    return intrinsic - premium;
+  } else {
+    const intrinsic = Math.max(0, price - strike);
+    return premium - intrinsic;
+  }
+}
+
+function calc() {
+  const strike = +document.getElementById('strike').value;
+  const premium = +document.getElementById('premium').value;
+  const price = +document.getElementById('price').value;
+
+  document.getElementById('strike-out').textContent = '$' + strike;
+  document.getElementById('premium-out').textContent = '$' + premium.toFixed(1);
+  document.getElementById('price-out').textContent = '$' + price;
+
+  const pnl = getPnL(price, strike, premium, optType);
+  const breakeven = optType === 'call' ? strike + premium : (optType === 'put' ? strike - premium : strike + premium);
+  const maxLoss = optType === 'sell_call' ? null : -premium;
+  const maxGain = optType === 'call' ? null : (optType === 'put' ? strike - premium : premium);
+
+  const isProfit = pnl > 0;
+  const pnlColor = pnl > 0 ? '#0F6E56' : pnl < 0 ? '#A32D2D' : 'var(--color-text-secondary)';
+
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><div class="stat-lbl">PnL hiện tại</div><div class="stat-val" style="color:${pnlColor}">${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}</div></div>
+    <div class="stat"><div class="stat-lbl">Breakeven</div><div class="stat-val">$${breakeven.toFixed(1)}</div><div class="stat-sub">Giá hoà vốn</div></div>
+    <div class="stat"><div class="stat-lbl">Max loss</div><div class="stat-val" style="color:#A32D2D">${maxLoss === null ? '∞' : '$' + Math.abs(maxLoss).toFixed(1)}</div></div>
+    <div class="stat"><div class="stat-lbl">Max gain</div><div class="stat-val" style="color:#0F6E56">${maxGain === null ? '∞' : '$' + maxGain.toFixed(1)}</div></div>`;
+
+  const typeLabel = {'call':'Mua Call','put':'Mua Put','sell_call':'Bán Call'}[optType];
+  const statusText = pnl > 0 ? `Lời <strong style="color:#0F6E56">$${pnl.toFixed(2)}</strong> — thị trường đủ xa khỏi strike` :
+    pnl === 0 ? `Hoà vốn chính xác tại breakeven $${breakeven.toFixed(1)}` :
+    `Lỗ <strong style="color:#A32D2D">$${Math.abs(pnl).toFixed(2)}</strong> — ${optType === 'sell_call' ? 'bị gọi thực thi, lỗ vô hạn về lý thuyết' : 'option hết hạn vô giá trị một phần hoặc toàn bộ'}`;
+
+  document.getElementById('result-box').innerHTML = `<div style="font-size:12px;color:var(--color-text-secondary);line-height:1.5;padding:.7rem 1rem;background:var(--color-background-secondary);border-radius:var(--border-radius-md)">${typeLabel} — Giá thị trường $${price} | ${statusText}</div>`;
+
+  drawChart(strike, premium, optType);
+  drawMoneyBar(price, strike, optType);
+}
+
+function drawChart(strike, premium, type) {
+  const prices = [];
+  const pnls = [];
+  for (let p = 60; p <= 160; p += 1) {
+    prices.push(p);
+    pnls.push(getPnL(p, strike, premium, type));
+  }
+
+  const marketPrice = +document.getElementById('price').value;
+  const curPnl = getPnL(marketPrice, strike, premium, type);
+
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const textColor = isDark ? '#9c9a92' : '#73726c';
+  const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+  const lineColor = '#378ADD';
+  const zeroColor = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)';
+
+  const pointColors = pnls.map(v => v > 0 ? '#1D9E75' : v < 0 ? '#E24B4A' : '#888780');
+
+  if (chart) { chart.destroy(); }
+  const ctx = document.getElementById('pnl-chart').getContext('2d');
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: prices,
+      datasets: [{
+        data: pnls,
+        borderColor: lineColor,
+        borderWidth: 2,
+        pointRadius: 0,
+        tension: 0.1,
+        fill: false,
+        segment: {
+          borderColor: ctx => ctx.p1.parsed.y >= 0 ? '#1D9E75' : '#E24B4A',
+        },
+      }, {
+        data: prices.map(() => 0),
+        borderColor: zeroColor,
+        borderWidth: 1,
+        borderDash: [4, 4],
+        pointRadius: 0,
+        fill: false,
+      }, {
+        data: prices.map(p => p === marketPrice ? curPnl : null),
+        borderColor: 'transparent',
+        pointBackgroundColor: curPnl >= 0 ? '#1D9E75' : '#E24B4A',
+        pointRadius: prices.map(p => p === marketPrice ? 5 : 0),
+        fill: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: { legend: { display: false }, tooltip: {
+        callbacks: {
+          label: ctx => {
+            const v = ctx.parsed.y;
+            return (v >= 0 ? '+$' : '-$') + Math.abs(v).toFixed(2);
+          },
+          title: ctx => 'Giá thị trường: $' + ctx[0].label,
+        }
+      }},
+      scales: {
+        x: { ticks: { color: textColor, font: { size: 11 }, maxTicksLimit: 6, callback: v => '$' + v }, grid: { color: gridColor }, border: { display: false } },
+        y: { ticks: { color: textColor, font: { size: 11 }, callback: v => (v >= 0 ? '+$' : '-$') + Math.abs(v) }, grid: { color: gridColor }, border: { display: false } }
+      }
+    }
+  });
+}
+
+function drawMoneyBar(price, strike, type) {
+  const canvas = document.getElementById('money-bar');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.offsetWidth || 580;
+  canvas.width = W;
+  canvas.height = 56;
+
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const textColor = isDark ? '#9c9a92' : '#73726c';
+
+  ctx.clearRect(0, 0, W, 56);
+
+  const pad = 40;
+  const barW = W - pad * 2;
+  const barY = 10;
+  const barH = 22;
+  const min = 60, max = 160;
+  const toX = v => pad + ((v - min) / (max - min)) * barW;
+
+  const strikeX = toX(strike);
+  const priceX = Math.min(W - pad, Math.max(pad, toX(price)));
+
+  const isITM = type === 'call' ? price > strike : type === 'put' ? price < strike : price < strike;
+  const itmColor = '#1D9E75';
+  const otmColor = '#E24B4A';
+  const atmColor = '#BA7517';
+
+  ctx.fillStyle = isDark ? '#3a3835' : '#f1efe8';
+  ctx.beginPath(); ctx.roundRect(pad, barY, barW, barH, 6); ctx.fill();
+
+  if (type === 'call') {
+    ctx.fillStyle = price > strike ? itmColor : otmColor;
+    if (price > strike) {
+      ctx.fillStyle = itmColor;
+      ctx.beginPath(); ctx.roundRect(strikeX, barY, Math.max(0, priceX - strikeX), barH, [0,6,6,0]); ctx.fill();
+    }
+  } else if (type === 'put') {
+    if (price < strike) {
+      ctx.fillStyle = itmColor;
+      ctx.beginPath(); ctx.roundRect(priceX, barY, Math.max(0, strikeX - priceX), barH, [6,0,0,6]); ctx.fill();
+    }
+  }
+
+  ctx.strokeStyle = '#534AB7'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(strikeX, barY - 2); ctx.lineTo(strikeX, barY + barH + 2); ctx.stroke();
+
+  ctx.strokeStyle = '#1D9E75'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(priceX, barY - 2); ctx.lineTo(priceX, barY + barH + 2); ctx.stroke();
+
+  ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
+
+  ctx.fillStyle = '#534AB7';
+  ctx.fillText('Strike $' + strike, strikeX, barY + barH + 14);
+
+  ctx.fillStyle = '#0F6E56';
+  const priceLabel = 'Giá $' + price;
+  const labelX = Math.min(W - 40, Math.max(40, priceX));
+  ctx.fillText(priceLabel, labelX, barY - 4);
+
+  const diff = Math.abs(price - strike);
+  const moneyness = diff < 1 ? 'At-the-money (ATM)' : isITM ? 'In-the-money (ITM)' : 'Out-of-the-money (OTM)';
+  const mColor = diff < 1 ? atmColor : isITM ? itmColor : otmColor;
+  ctx.fillStyle = mColor; ctx.font = '500 11px sans-serif';
+  ctx.fillText(moneyness, W / 2, barY + barH + 28);
+}
+
+calc();
+window.addEventListener('resize', () => { if(chart) { drawMoneyBar(+document.getElementById('price').value, +document.getElementById('strike').value, optType); }});
+</script>
