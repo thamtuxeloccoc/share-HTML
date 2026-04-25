@@ -1,0 +1,207 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:1rem 0;display:flex;flex-direction:column;gap:14px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.1rem 1.25rem}
+.sec-title{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.slider-block{margin-bottom:12px}
+.slider-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.slider-lbl{font-size:13px;color:var(--color-text-secondary)}
+.slider-inline{display:flex;align-items:center;gap:6px}
+.slider-inline input[type=range]{flex:1;min-width:0}
+.num-input{width:78px;font-size:13px;font-weight:500;text-align:right;padding:3px 7px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary);-moz-appearance:textfield}
+.num-input::-webkit-outer-spin-button,.num-input::-webkit-inner-spin-button{-webkit-appearance:none}
+.num-input:focus{outline:none;border-color:#378ADD;box-shadow:0 0 0 2px #378ADD33}
+.metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.7rem .85rem}
+.metric-lbl{font-size:10px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.metric-val{font-size:17px;font-weight:500;color:var(--color-text-primary)}
+.metric-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:12px 0}
+.scenario-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.scenario{border-radius:var(--border-radius-md);padding:.8rem .9rem;border:0.5px solid var(--color-border-tertiary)}
+.sc-title{font-size:12px;font-weight:500;margin-bottom:6px;color:var(--color-text-primary)}
+.sc-row{display:flex;justify-content:space-between;font-size:12px;padding:2px 0}
+.sc-label{color:var(--color-text-tertiary)}
+.sc-val{font-weight:500}
+.profit{color:#0F6E56}
+.loss{color:#A32D2D}
+.warn-box{border-radius:var(--border-radius-md);padding:.8rem .9rem;border:0.5px solid #F5C4B3;background:#FAECE710;margin-top:12px}
+.warn-title{font-size:12px;font-weight:500;color:#993C1D;margin-bottom:4px}
+.warn-text{font-size:12px;color:var(--color-text-secondary);line-height:1.5}
+.bar-wrap{margin:10px 0}
+.bar-row{margin-bottom:8px}
+.bar-lbl-row{display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-tertiary);margin-bottom:3px}
+.bar-track{height:22px;background:var(--color-background-secondary);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;transition:width .3s}
+.bar-caption{font-size:11px;color:var(--color-text-tertiary);margin-top:4px}
+.lev-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:8px}
+.lev-ex{border-radius:var(--border-radius-md);padding:.6rem .75rem;border:0.5px solid var(--color-border-tertiary);cursor:pointer;transition:all .15s}
+.lev-ex:hover{border-color:var(--color-border-secondary);background:var(--color-background-secondary)}
+.lev-ex.active{border-color:#378ADD;background:#E6F1FB18}
+.lev-ex-name{font-size:11px;font-weight:500;color:var(--color-text-primary)}
+.lev-ex-val{font-size:18px;font-weight:500;color:#185FA5;margin:2px 0}
+.lev-ex-type{font-size:10px;color:var(--color-text-tertiary)}
+@media(min-width:600px){
+  .lev-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .metric-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .num-input{width:90px;font-size:14px}
+}
+</style>
+
+<div class="wrap">
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Máy tính đòn bẩy tài chính tương tác</h2>
+
+<div class="card">
+  <div class="sec-title">Đòn bẩy theo sản phẩm</div>
+  <div class="lev-grid" id="lev-grid"></div>
+</div>
+
+<div class="card">
+  <div class="sec-title">Máy tính đòn bẩy</div>
+
+  <div class="slider-block">
+    <div class="slider-top">
+      <span class="slider-lbl">Vốn của bạn</span>
+    </div>
+    <div class="slider-inline">
+      <input type="range" min="100" max="10000" step="100" value="1000" id="capital" oninput="syncFromSlider('capital')">
+      <input type="number" class="num-input" id="capital-num" value="1000" min="100" max="10000" step="100" oninput="syncFromNum('capital')">
+    </div>
+  </div>
+
+  <div class="slider-block">
+    <div class="slider-top">
+      <span class="slider-lbl">Đòn bẩy</span>
+    </div>
+    <div class="slider-inline">
+      <input type="range" min="1" max="100" step="1" value="10" id="leverage" oninput="syncFromSlider('leverage')">
+      <input type="number" class="num-input" id="leverage-num" value="10" min="1" max="100" step="1" oninput="syncFromNum('leverage')">
+    </div>
+  </div>
+
+  <div class="slider-block">
+    <div class="slider-top">
+      <span class="slider-lbl">Thị trường thay đổi (%)</span>
+    </div>
+    <div class="slider-inline">
+      <input type="range" min="-20" max="20" step="0.5" value="5" id="move" oninput="syncFromSlider('move')">
+      <input type="number" class="num-input" id="move-num" value="5" min="-20" max="20" step="0.5" oninput="syncFromNum('move')">
+    </div>
+  </div>
+
+  <div class="metric-grid" id="metrics"></div>
+
+  <div class="bar-wrap">
+    <div class="bar-row">
+      <div class="bar-lbl-row"><span>Vốn thật bạn bỏ</span><span id="bar1-lbl"></span></div>
+      <div class="bar-track"><div class="bar-fill" id="bar1" style="background:#378ADD"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-lbl-row"><span>Tổng tài sản kiểm soát</span><span id="bar2-lbl"></span></div>
+      <div class="bar-track"><div class="bar-fill" id="bar2" style="background:#1D9E75"></div></div>
+    </div>
+    <div class="bar-caption">Thanh xanh lá = phần được khuếch đại bởi đòn bẩy</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec-title">Kịch bản lời / lỗ</div>
+  <div class="scenario-grid" id="scenarios"></div>
+  <div id="warn-area"></div>
+</div>
+</div>
+
+<script>
+const examples=[
+  {name:'Cổ phiếu margin',val:'2x',type:'Stocks US',lev:2},
+  {name:'Futures MES/MNQ',val:'20x',type:'Micro futures',lev:20},
+  {name:'Futures ES/NQ',val:'50x',type:'Standard futures',lev:50},
+  {name:'Forex retail',val:'100x',type:'Forex broker',lev:100},
+];
+
+document.getElementById('lev-grid').innerHTML=examples.map((e,i)=>`
+  <div class="lev-ex${i===1?' active':''}" id="lex-${i}" onclick="setLevEx(${i},${e.lev})">
+    <div class="lev-ex-name">${e.name}</div>
+    <div class="lev-ex-val">${e.val}</div>
+    <div class="lev-ex-type">${e.type}</div>
+  </div>`).join('');
+
+function clamp(v,mn,mx){return Math.min(mx,Math.max(mn,v));}
+
+function syncFromSlider(id){
+  const s=document.getElementById(id);
+  document.getElementById(id+'-num').value=s.value;
+  calc();
+}
+function syncFromNum(id){
+  const n=document.getElementById(id+'-num');
+  const s=document.getElementById(id);
+  const mn=parseFloat(s.min),mx=parseFloat(s.max),st=parseFloat(s.step);
+  let v=parseFloat(n.value);
+  if(isNaN(v))return;
+  v=clamp(v,mn,mx);
+  const snapped=Math.round(v/st)*st;
+  s.value=snapped;
+  n.value=snapped;
+  calc();
+}
+
+function fmt(n){
+  const a=Math.abs(n);
+  if(a>=1000)return(n<0?'-':'')+'$'+Math.round(a).toLocaleString();
+  return(n<0?'-':'')+'$'+Math.abs(n).toFixed(2);
+}
+function fmtPct(n){return(n>0?'+':'')+n.toFixed(1)+'%'}
+
+function calc(){
+  const capital=+document.getElementById('capital').value;
+  const leverage=+document.getElementById('leverage').value;
+  const movePct=+document.getElementById('move').value;
+
+  const controlled=capital*leverage;
+  const pnl=controlled*(movePct/100);
+  const pnlPct=(pnl/capital)*100;
+
+  document.getElementById('metrics').innerHTML=`
+    <div class="metric"><div class="metric-lbl">Vốn bỏ vào</div><div class="metric-val">$${capital.toLocaleString()}</div><div class="metric-sub">Margin của bạn</div></div>
+    <div class="metric"><div class="metric-lbl">Tài sản kiểm soát</div><div class="metric-val">$${controlled.toLocaleString()}</div><div class="metric-sub">${leverage}x đòn bẩy</div></div>
+    <div class="metric"><div class="metric-lbl">${movePct>=0?'Lợi nhuận':'Thua lỗ'}</div><div class="metric-val" style="color:${pnl>=0?'#0F6E56':'#A32D2D'}">${fmt(pnl)}</div><div class="metric-sub" style="color:${pnl>=0?'#0F6E56':'#A32D2D'}">${fmtPct(pnlPct)} vốn</div></div>
+  `;
+
+  document.getElementById('bar1').style.width=Math.min(100,(capital/controlled)*100)+'%';
+  document.getElementById('bar2').style.width='100%';
+  document.getElementById('bar1-lbl').textContent='$'+capital.toLocaleString();
+  document.getElementById('bar2-lbl').textContent='$'+controlled.toLocaleString();
+
+  const scens=[
+    {title:'Thị trường +2%',move:2},{title:'Thị trường +5%',move:5},
+    {title:'Thị trường −2%',move:-2},{title:'Thị trường −5%',move:-5},
+  ];
+  document.getElementById('scenarios').innerHTML=scens.map(s=>{
+    const p=controlled*(s.move/100);
+    const pp=(p/capital)*100;
+    const ip=p>=0;
+    return`<div class="scenario">
+      <div class="sc-title">${s.title}</div>
+      <div class="sc-row"><span class="sc-label">PnL</span><span class="sc-val ${ip?'profit':'loss'}">${fmt(p)}</span></div>
+      <div class="sc-row"><span class="sc-label">% vốn</span><span class="sc-val ${ip?'profit':'loss'}">${fmtPct(pp)}</span></div>
+      <div class="sc-row"><span class="sc-label">Vốn còn lại</span><span class="sc-val">${fmt(capital+p)}</span></div>
+    </div>`;
+  }).join('');
+
+  const liqPct=(100/leverage).toFixed(1);
+  document.getElementById('warn-area').innerHTML=leverage>=10?`<div class="warn-box">
+    <div class="warn-title">Điểm liquidation / margin call</div>
+    <div class="warn-text">Với đòn bẩy ${leverage}x, thị trường chỉ cần đi ngược <strong>${liqPct}%</strong> là bạn mất toàn bộ vốn. Với ES/NQ biến động 1–2%/giờ, điều này có thể xảy ra trong vài phút nếu không có stop-loss.</div>
+  </div>`:'';
+}
+
+function setLevEx(idx,lev){
+  examples.forEach((_,i)=>document.getElementById('lex-'+i).classList.toggle('active',i===idx));
+  document.getElementById('leverage').value=lev;
+  document.getElementById('leverage-num').value=lev;
+  calc();
+}
+
+calc();
+</script>
