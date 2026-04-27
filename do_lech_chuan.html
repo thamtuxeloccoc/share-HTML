@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trực quan hóa Độ lệch chuẩn</title>
+    <style>
+        :root {
+            --primary-blue: #0d6efd;
+            --light-blue-bg: #e9ecef;
+            --shaded-blue: rgba(13, 110, 253, 0.1);
+            --dashed-blue: #8bb4f6;
+            --red-line: #dc3545;
+            --text-dark: #212529;
+            --text-muted: #6c757d;
+            --bg-color: #f4f6f8;
+            --panel-bg: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .dashboard {
+            background-color: var(--panel-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 800px;
+            padding: 24px;
+            border: 1px solid #e3e6f0;
+        }
+
+        /* Header Section */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        /* Chart Section */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            margin-bottom: 20px;
+            background-color: #fafbfa;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .instruction {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+
+        /* Controls Section */
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f8f9fa;
+            padding: 16px 24px;
+            border-radius: 12px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .slider-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-grow: 1;
+        }
+
+        .slider-label {
+            font-size: 14px;
+            color: var(--text-dark);
+            white-space: nowrap;
+        }
+
+        input[type="range"] {
+            flex-grow: 1;
+            max-width: 200px;
+            cursor: pointer;
+            accent-color: var(--primary-blue);
+        }
+
+        .value-input {
+            width: 50px;
+            padding: 6px 10px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .btn-generate {
+            background-color: #e2e6ea;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-generate:hover {
+            background-color: #d3d9df;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .slider-group {
+                width: 100%;
+            }
+            input[type="range"] {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard">
+    <div class="header">
+        <h2 class="title">Trực quan hóa Độ lệch chuẩn</h2>
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-label">Giá trị trung bình (μ)</span>
+                <span class="stat-value" id="valMean">50.0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Độ lệch chuẩn (σ)</span>
+                <span class="stat-value" id="valStdDev">10.0</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="chartCanvas"></canvas>
+    </div>
+    
+    <div class="instruction">
+        Di chuyển thanh trượt để thay đổi mức độ phân tán của dữ liệu
+    </div>
+
+    <div class="controls">
+        <div class="slider-group">
+            <span class="slider-label">Mức độ phân tán (σ)</span>
+            <input type="range" id="sdSlider" min="2" max="25" value="9" step="0.5">
+            <input type="text" id="sdInput" class="value-input" value="9" readonly>
+        </div>
+        <button class="btn-generate" id="btnRegenerate">Tạo dữ liệu ngẫu nhiên mới</button>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('chartCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    const sdSlider = document.getElementById('sdSlider');
+    const sdInput = document.getElementById('sdInput');
+    const btnRegenerate = document.getElementById('btnRegenerate');
+    
+    const displayMean = document.getElementById('valMean');
+    const displayStdDev = document.getElementById('valStdDev');
+
+    let currentData = [];
+    const targetMean = 50;
+    const numPoints = 100;
+
+    // Thiết lập kích thước Canvas nét hơn (Fix blur trên màn hình phân giải cao)
+    function resizeCanvas() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = rect.width * window.devicePixelRatio;
+        canvas.height = rect.height * window.devicePixelRatio;
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        canvas.style.width = rect.width + 'px';
+        canvas.style.height = rect.height + 'px';
+    }
+
+    // Thuật toán Box-Muller để tạo số ngẫu nhiên theo phân phối chuẩn
+    function randomNormal(mean, stdDev) {
+        let u = 0, v = 0;
+        while(u === 0) u = Math.random(); 
+        while(v === 0) v = Math.random();
+        let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+        return num * stdDev + mean;
+    }
+
+    // Tạo tập dữ liệu mới
+    function generateData(targetSD) {
+        currentData = [];
+        for (let i = 0; i < numPoints; i++) {
+            let val = randomNormal(targetMean, targetSD);
+            // Giới hạn dữ liệu nằm trong khoảng 0-100 để hiển thị đẹp hơn
+            if (val < 0) val = 0;
+            if (val > 100) val = 100;
+            currentData.push(val);
+        }
+        calculateAndDraw();
+    }
+
+    // Tính toán số liệu thống kê thực tế từ mảng dữ liệu vừa tạo
+    function calculateAndDraw() {
+        // Tính Mean
+        const sum = currentData.reduce((a, b) => a + b, 0);
+        const actualMean = sum / numPoints;
+
+        // Tính Std Dev
+        const squareDiffs = currentData.map(value => {
+            const diff = value - actualMean;
+            return diff * diff;
+        });
+        const avgSquareDiff = squareDiffs.reduce((a, b) => a + b, 0) / numPoints;
+        const actualSD = Math.sqrt(avgSquareDiff);
+
+        // Cập nhật text UI
+        displayMean.textContent = actualMean.toFixed(1);
+        displayStdDev.textContent = actualSD.toFixed(1);
+
+        drawChart(actualMean, actualSD);
+    }
+
+    // Hàm vẽ hình chữ nhật bo góc (cho các nhãn)
+    function roundRect(x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.closePath();
+        return ctx;
+    }
+
+    // Hàm vẽ toàn bộ biểu đồ lên Canvas
+    function drawChart(mean, sd) {
+        const width = canvas.width / window.devicePixelRatio;
+        const height = canvas.height / window.devicePixelRatio;
+        
+        ctx.clearRect(0, 0, width, height);
+
+        const padding = { left: 40, right: 40, top: 40, bottom: 60 };
+        const chartWidth = width - padding.left - padding.right;
+        const chartHeight = height - padding.top - padding.bottom;
+        
+        // Hàm chuyển đổi giá trị (0-100) sang tọa độ X trên canvas
+        const mapX = (val) => padding.left + (val / 100) * chartWidth;
+        const meanX = mapX(mean);
+        const sdLeftX = mapX(mean - sd);
+        const sdRightX = mapX(mean + sd);
+        const yAxisLine = height - padding.bottom;
+
+        // 1. Vẽ vùng bóng mờ +/- 1 SD
+        ctx.fillStyle = 'rgba(13, 110, 253, 0.1)';
+        ctx.fillRect(sdLeftX, padding.top, sdRightX - sdLeftX, chartHeight);
+
+        // 2. Vẽ đường đứt nét cho biên SD
+        ctx.beginPath();
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = '#8bb4f6';
+        ctx.lineWidth = 1.5;
+        
+        ctx.moveTo(sdLeftX, padding.top);
+        ctx.lineTo(sdLeftX, yAxisLine);
+        ctx.moveTo(sdRightX, padding.top);
+        ctx.lineTo(sdRightX, yAxisLine);
+        ctx.stroke();
+        ctx.setLineDash([]); // Reset line dash
+
+        // 3. Vẽ đường trục X
+        ctx.beginPath();
+        ctx.strokeStyle = '#999';
+        ctx.lineWidth = 1.5;
+        ctx.moveTo(padding.left, yAxisLine);
+        ctx.lineTo(width - padding.right, yAxisLine);
+        ctx.stroke();
+
+        // Vẽ tick marks trục X (0, 25, 50, 75, 100)
+        ctx.fillStyle = '#666';
+        ctx.font = '11px sans-serif';
+        ctx.textAlign = 'center';
+        [0, 25, 50, 75, 100].forEach(tick => {
+            const tx = mapX(tick);
+            ctx.beginPath();
+            ctx.moveTo(tx, yAxisLine);
+            ctx.lineTo(tx, yAxisLine + 5);
+            ctx.stroke();
+            ctx.fillText(tick, tx, yAxisLine + 20);
+        });
+
+        // 4. Thuật toán Binning để xếp chồng các chấm (Dot Plot)
+        const dotRadius = 5;
+        const binWidth = dotRadius * 2.2; 
+        const bins = {};
+
+        ctx.fillStyle = '#0d6efd';
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 1;
+
+        currentData.forEach(val => {
+            const cx = mapX(val);
+            // Gom các chấm gần nhau vào cùng một cột (bin)
+            const binIndex = Math.round(cx / binWidth);
+            if (!bins[binIndex]) bins[binIndex] = [];
+            
+            // Tính tọa độ Y dựa trên số lượng chấm đã có trong cột đó
+            const dotCountInBin = bins[binIndex].length;
+            const cy = yAxisLine - dotRadius - (dotCountInBin * (dotRadius * 2 + 1));
+            
+            bins[binIndex].push({x: binIndex * binWidth, y: cy});
+
+            // Vẽ chấm
+            ctx.beginPath();
+            ctx.arc(binIndex * binWidth, cy, dotRadius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+        });
+
+        // 5. Vẽ đường trung bình (Mean Line) màu đỏ
+        ctx.beginPath();
+        ctx.strokeStyle = '#dc3545';
+        ctx.lineWidth = 2;
+        ctx.moveTo(meanX, padding.top);
+        ctx.lineTo(meanX, yAxisLine);
+        ctx.stroke();
+
+        // 6. Vẽ các Badge/Label
+        // Badge "+/- 1 SD"
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = '#0d6efd';
+        ctx.lineWidth = 1;
+        roundRect(meanX - 25, padding.top + 10, 50, 22, 11).fill();
+        roundRect(meanX - 25, padding.top + 10, 50, 22, 11).stroke();
+        ctx.fillStyle = '#333';
+        ctx.font = '10px sans-serif';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('±1 SD', meanX, padding.top + 21);
+
+        // Badge "TRUNG BÌNH (M)"
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = '#dc3545';
+        ctx.lineWidth = 1;
+        roundRect(meanX - 45, yAxisLine + 25, 90, 22, 11).fill();
+        roundRect(meanX - 45, yAxisLine + 25, 90, 22, 11).stroke();
+        ctx.fillStyle = '#dc3545';
+        ctx.font = 'bold 10px sans-serif';
+        ctx.fillText('TRUNG BÌNH (M)', meanX, yAxisLine + 36);
+    }
+
+    // Xử lý sự kiện tương tác
+    window.addEventListener('resize', () => {
+        resizeCanvas();
+        calculateAndDraw();
+    });
+
+    sdSlider.addEventListener('input', function() {
+        sdInput.value = this.value;
+        generateData(parseFloat(this.value));
+    });
+
+    btnRegenerate.addEventListener('click', function() {
+        generateData(parseFloat(sdSlider.value));
+    });
+
+    // Khởi tạo lần đầu
+    resizeCanvas();
+    generateData(parseFloat(sdSlider.value));
+
+</script>
+</body>
+</html>
