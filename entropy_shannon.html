@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trực quan hóa Entropy Shannon</title>
+    <style>
+        :root {
+            --col-a: #1a56db; /* Xanh dương */
+            --col-b: #15803d; /* Xanh lá */
+            --col-c: #d97706; /* Cam */
+            --bg-body: #f0f4f9;
+            --bg-card: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-col: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .dashboard {
+            background-color: var(--bg-body);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 850px;
+            border: 1px solid #dcdfe4;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .title-section h2 {
+            margin: 0 0 8px 0;
+            font-size: 20px;
+            color: var(--text-dark);
+        }
+
+        .status-text {
+            font-size: 13px;
+            color: var(--text-dark);
+        }
+
+        .stats-section {
+            display: flex;
+            gap: 30px;
+            text-align: left;
+        }
+
+        .stat-box {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        /* Main Card Panel */
+        .visual-card {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .visual-title {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            position: absolute;
+        }
+
+        /* Icon Grid Section */
+        .distribution-area {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            min-height: 180px;
+            padding-top: 20px;
+        }
+
+        .group-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 30%;
+        }
+
+        .icon-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-content: flex-end;
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+
+        .icon-grid svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .group-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .divider {
+            height: 1px;
+            background-color: var(--border-col);
+            margin: 24px 0;
+        }
+
+        /* Chart Section */
+        .chart-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            display: block;
+            width: 180px;
+            height: 180px;
+        }
+
+        /* Controls Section */
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 40px;
+            padding: 0 10px;
+        }
+
+        .control-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .ctrl-label {
+            font-size: 14px;
+            color: var(--text-dark);
+            min-width: 60px;
+        }
+
+        input[type="range"] {
+            flex-grow: 1;
+            cursor: pointer;
+            accent-color: var(--col-a); /* Trình duyệt sẽ tự đổi màu hợp lý */
+        }
+
+        .num-input {
+            width: 50px;
+            height: 32px;
+            border: 1px solid var(--border-col);
+            border-radius: 16px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            outline: none;
+            background-color: var(--bg-body);
+        }
+
+        /* Row C is full width roughly in the image, but we can stick to grid */
+        .control-row.full-width {
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 600px) {
+            .controls-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .distribution-area {
+                flex-direction: column;
+                gap: 30px;
+                align-items: center;
+            }
+            .group-col {
+                width: 100%;
+            }
+            .visual-title {
+                position: static;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard">
+    <div class="header">
+        <div class="title-section">
+            <h2>Trực quan hóa Entropy Shannon</h2>
+            <div class="status-text" id="statusText">Mức độ hỗn loạn trung bình</div>
+        </div>
+        <div class="stats-section">
+            <div class="stat-box">
+                <span class="stat-label">Tổng số</span>
+                <span class="stat-value" id="valTotal">83</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Giá trị Entropy</span>
+                <span class="stat-value"><span id="valEntropy">1.40</span> bits</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="visual-card">
+        <div class="visual-title">Phân bổ các phần tử</div>
+        
+        <div class="distribution-area">
+            <div class="group-col">
+                <div class="icon-grid" id="gridA"></div>
+                <div class="group-label">Nhóm A</div>
+            </div>
+            <div class="group-col">
+                <div class="icon-grid" id="gridB"></div>
+                <div class="group-label">Nhóm B</div>
+            </div>
+            <div class="group-col">
+                <div class="icon-grid" id="gridC"></div>
+                <div class="group-label">Nhóm C</div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="chart-area">
+            <canvas id="donutChart" width="360" height="360"></canvas>
+        </div>
+    </div>
+
+    <div class="controls-grid">
+        <div class="control-row">
+            <span class="ctrl-label">Nhóm A</span>
+            <input type="range" id="slideA" min="0" max="50" value="33">
+            <input type="text" id="inputA" class="num-input" value="33" readonly>
+        </div>
+        <div class="control-row">
+            <span class="ctrl-label">Nhóm B</span>
+            <input type="range" id="slideB" min="0" max="50" value="10">
+            <input type="text" id="inputB" class="num-input" value="10" readonly>
+        </div>
+        <div class="control-row full-width">
+            <span class="ctrl-label">Nhóm C</span>
+            <input type="range" id="slideC" min="0" max="50" value="40">
+            <input type="text" id="inputC" class="num-input" value="40" readonly>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- Cấu hình màu sắc ---
+    const colors = {
+        A: '#1a56db', // Xanh dương
+        B: '#15803d', // Xanh lá
+        C: '#d97706'  // Cam
+    };
+
+    // --- Lấy Elements ---
+    const slideA = document.getElementById('slideA');
+    const slideB = document.getElementById('slideB');
+    const slideC = document.getElementById('slideC');
+    const inputA = document.getElementById('inputA');
+    const inputB = document.getElementById('inputB');
+    const inputC = document.getElementById('inputC');
+    
+    const valTotal = document.getElementById('valTotal');
+    const valEntropy = document.getElementById('valEntropy');
+    const statusText = document.getElementById('statusText');
+    
+    const gridA = document.getElementById('gridA');
+    const gridB = document.getElementById('gridB');
+    const gridC = document.getElementById('gridC');
+    
+    const canvas = document.getElementById('donutChart');
+    const ctx = canvas.getContext('2d');
+
+    // Hàm tạo mã HTML cho 1 biểu tượng hộp (Box icon)
+    function getBoxIcon(color) {
+        return `<svg viewBox="0 0 24 24" stroke="${color}" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+        </svg>`;
+    }
+
+    // Hàm vẽ biểu đồ Donut lên Canvas
+    function drawDonutChart(pA, pB, pC) {
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+        const radius = Math.min(cx, cy) - 10;
+        const innerRadius = radius * 0.4; // Lỗ hở ở giữa bằng 40%
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        let startAngle = -Math.PI / 2; // Bắt đầu từ hướng 12h (top)
+
+        function drawSlice(percent, color, label) {
+            if (percent === 0) return;
+            const sliceAngle = percent * Math.PI * 2;
+            const endAngle = startAngle + sliceAngle;
+
+            // Vẽ cung tròn
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.arc(cx, cy, radius, startAngle, endAngle);
+            ctx.closePath();
+            ctx.fill();
+
+            // Tính vị trí vẽ Text Label (Nằm ở giữa cung tròn)
+            const midAngle = startAngle + sliceAngle / 2;
+            const labelR = radius * 0.7; // Khoảng cách label từ tâm
+            const lx = cx + Math.cos(midAngle) * labelR;
+            const ly = cy + Math.sin(midAngle) * labelR;
+
+            // Chỉ vẽ chữ nếu cung tròn đủ lớn (> 5%)
+            if (percent > 0.05) {
+                // Đổi màu chữ đen cho nhóm C (Cam) để dễ đọc, trắng cho A và B
+                ctx.fillStyle = (label === 'C') ? '#000000' : '#ffffff';
+                ctx.font = 'bold 24px sans-serif'; // Font to hơn vì canvas đang scale x2 (360x360)
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(label, lx, ly);
+            }
+
+            startAngle = endAngle;
+        }
+
+        // Vẽ từng lát cắt (Thứ tự A -> B -> C giống trong hình)
+        drawSlice(pA, colors.A, 'A');
+        drawSlice(pB, colors.B, 'B');
+        drawSlice(pC, colors.C, 'C');
+
+        // Vẽ hình tròn trắng ở giữa để tạo thành Donut (Bánh khuyết)
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(cx, cy, innerRadius, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    // Cập nhật toàn bộ giao diện
+    function updateUI() {
+        const a = parseInt(slideA.value);
+        const b = parseInt(slideB.value);
+        const c = parseInt(slideC.value);
+        
+        // Cập nhật ô input số
+        inputA.value = a;
+        inputB.value = b;
+        inputC.value = c;
+
+        const total = a + b + c;
+        valTotal.textContent = total;
+
+        // Xử lý khi không có phần tử nào
+        if (total === 0) {
+            valEntropy.textContent = '0.00';
+            statusText.textContent = 'Không có dữ liệu.';
+            gridA.innerHTML = ''; gridB.innerHTML = ''; gridC.innerHTML = '';
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            return;
+        }
+
+        // Tính xác suất
+        const pA = a / total;
+        const pB = b / total;
+        const pC = c / total;
+
+        // Tính Shannon Entropy: H = -sum(p * log2(p))
+        let entropy = 0;
+        if (pA > 0) entropy -= pA * Math.log2(pA);
+        if (pB > 0) entropy -= pB * Math.log2(pB);
+        if (pC > 0) entropy -= pC * Math.log2(pC);
+
+        valEntropy.textContent = entropy.toFixed(2);
+
+        // Cập nhật Text Trạng thái
+        if (entropy === 0) {
+            statusText.textContent = "Entropy = 0: Trật tự tuyệt đối";
+        } else if (a === b && b === c) {
+            statusText.textContent = "Entropy tối đa: Hỗn loạn cao nhất";
+        } else {
+            statusText.textContent = "Mức độ hỗn loạn trung bình";
+        }
+
+        // Cập nhật Grid Icons (Dùng repeat để nối chuỗi nhanh)
+        gridA.innerHTML = getBoxIcon(colors.A).repeat(a);
+        gridB.innerHTML = getBoxIcon(colors.B).repeat(b);
+        gridC.innerHTML = getBoxIcon(colors.C).repeat(c);
+
+        // Cập nhật biểu đồ Donut
+        drawDonutChart(pA, pB, pC);
+    }
+
+    // Gắn sự kiện cho các thanh trượt
+    slideA.addEventListener('input', updateUI);
+    slideB.addEventListener('input', updateUI);
+    slideC.addEventListener('input', updateUI);
+
+    // Chạy lần đầu tiên để khởi tạo
+    updateUI();
+</script>
+
+</body>
+</html>
