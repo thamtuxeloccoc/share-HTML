@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>61 Mẫu Hình Nến Nhật · TA-Lib Codex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;0,9..144,900;1,9..144,400&family=Spectral:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f0e6d2;
+    --paper-deep:#e6d9bf;
+    --ink:#1a1410;
+    --ink-soft:#3d322a;
+    --ink-faint:#6b5d4e;
+    --bull:#1f5f3f;
+    --bull-soft:#2d8b5f;
+    --bear:#8a1f1f;
+    --bear-soft:#b94a3a;
+    --gold:#a07d3a;
+    --gold-soft:#c9a663;
+    --rule:#c4b394;
+    --shadow: 0 1px 0 rgba(26,20,16,.05), 0 8px 24px -12px rgba(26,20,16,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Spectral',Georgia,serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.6;
+    font-size:16px;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(ellipse at top left, rgba(160,125,58,.06), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(138,31,31,.04), transparent 50%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .1 0 0 0 0 .08 0 0 0 0 .06 0 0 0 .12 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+  ::selection{background:var(--gold-soft);color:var(--ink)}
+
+  /* ============ HEADER ============ */
+  header.masthead{
+    border-bottom:2px solid var(--ink);
+    padding:2rem 5vw 1.2rem;
+    background:linear-gradient(180deg, var(--paper-deep), var(--paper));
+    position:relative;
+  }
+  .meta-bar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:'JetBrains Mono',monospace;
+    font-size:.7rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    border-bottom:1px solid var(--rule);
+    padding-bottom:.8rem;
+    margin-bottom:1.5rem;
+  }
+  .meta-bar .vol::before{content:"⌘ ";color:var(--gold)}
+  h1.title{
+    font-family:'Fraunces',serif;
+    font-weight:900;
+    font-size:clamp(2.5rem, 7vw, 5.5rem);
+    line-height:.95;
+    letter-spacing:-.04em;
+    font-variation-settings:"opsz" 144;
+    margin-bottom:.5rem;
+  }
+  h1.title em{
+    font-style:italic;
+    font-weight:400;
+    color:var(--bear);
+    font-variation-settings:"opsz" 144;
+  }
+  .subtitle{
+    font-family:'Spectral',serif;
+    font-style:italic;
+    font-size:clamp(1rem, 2vw, 1.35rem);
+    color:var(--ink-soft);
+    max-width:60ch;
+    margin-top:1rem;
+    border-left:3px double var(--gold);
+    padding-left:1rem;
+  }
+  .header-bottom{
+    display:flex;
+    flex-wrap:wrap;
+    gap:2rem;
+    margin-top:2rem;
+    padding-top:1.2rem;
+    border-top:1px solid var(--rule);
+    align-items:flex-end;
+    justify-content:space-between;
+  }
+  .lede{
+    font-family:'Spectral',serif;
+    font-size:.95rem;
+    max-width:55ch;
+    color:var(--ink-soft);
+    columns:2;
+    column-gap:2rem;
+    column-rule:1px solid var(--rule);
+  }
+  .lede p:first-child::first-letter{
+    font-family:'Fraunces',serif;
+    font-weight:800;
+    font-size:3.5rem;
+    line-height:.85;
+    float:left;
+    margin:.1rem .4rem 0 0;
+    color:var(--bear);
+  }
+  .stats{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.7rem;
+    text-transform:uppercase;
+    letter-spacing:.15em;
+    color:var(--ink-faint);
+    text-align:right;
+  }
+  .stats strong{
+    display:block;
+    font-family:'Fraunces',serif;
+    font-weight:900;
+    font-size:3rem;
+    color:var(--ink);
+    letter-spacing:-.03em;
+    line-height:1;
+    margin-bottom:.2rem;
+  }
+
+  /* ============ FILTER NAV ============ */
+  nav.filters{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:var(--paper);
+    border-bottom:1px solid var(--ink);
+    padding:.8rem 5vw;
+    display:flex;
+    flex-wrap:wrap;
+    gap:.5rem;
+    align-items:center;
+    box-shadow:0 1px 0 var(--rule);
+  }
+  nav.filters::before{
+    content:"FILTER";
+    font-family:'JetBrains Mono',monospace;
+    font-size:.65rem;
+    letter-spacing:.2em;
+    color:var(--ink-faint);
+    margin-right:.5rem;
+    border-right:1px solid var(--rule);
+    padding-right:.8rem;
+  }
+  .chip{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.7rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    padding:.4rem .9rem;
+    border:1px solid var(--ink);
+    background:transparent;
+    color:var(--ink);
+    cursor:pointer;
+    transition:all .2s ease;
+    border-radius:0;
+  }
+  .chip:hover{background:var(--ink);color:var(--paper)}
+  .chip.active{background:var(--ink);color:var(--paper)}
+  .chip[data-cat="bull"].active{background:var(--bull);border-color:var(--bull)}
+  .chip[data-cat="bear"].active{background:var(--bear);border-color:var(--bear)}
+  .chip[data-cat="dual"].active{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+  .chip[data-cat="neutral"].active{background:var(--ink-soft);border-color:var(--ink-soft)}
+  .chip .dot{
+    display:inline-block;width:8px;height:8px;border-radius:50%;
+    margin-right:.4rem;vertical-align:middle;
+    background:currentColor;
+  }
+  .chip[data-cat="bull"] .dot{background:var(--bull)}
+  .chip[data-cat="bear"] .dot{background:var(--bear)}
+  .chip[data-cat="dual"] .dot{background:var(--gold)}
+  .chip[data-cat="neutral"] .dot{background:var(--ink-faint)}
+  .chip[data-cat="bull"].active .dot,
+  .chip[data-cat="bear"].active .dot,
+  .chip[data-cat="dual"].active .dot,
+  .chip[data-cat="neutral"].active .dot{background:var(--paper)}
+  .search{
+    margin-left:auto;
+    display:flex;align-items:center;
+    gap:.4rem;
+    border-bottom:1px solid var(--ink);
+    padding:.2rem 0;
+  }
+  .search input{
+    background:transparent;border:0;outline:0;
+    font-family:'JetBrains Mono',monospace;
+    font-size:.8rem;color:var(--ink);
+    width:200px;
+  }
+  .search input::placeholder{color:var(--ink-faint)}
+  .search::before{content:"⌕";font-size:1rem;color:var(--ink-faint)}
+
+  /* ============ GRID ============ */
+  main.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(340px, 1fr));
+    gap:0;
+    padding:0 5vw 4rem;
+    border-top:1px solid var(--rule);
+  }
+  article.card{
+    border-right:1px solid var(--rule);
+    border-bottom:1px solid var(--rule);
+    padding:1.6rem 1.4rem 1.4rem;
+    background:transparent;
+    transition:background .25s ease;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+  }
+  article.card:hover{background:rgba(160,125,58,.06)}
+  article.card::before{
+    content:"";
+    position:absolute;
+    top:0;left:0;
+    width:0;height:3px;
+    background:var(--gold);
+    transition:width .35s cubic-bezier(.2,.8,.2,1);
+  }
+  article.card:hover::before{width:100%}
+
+  .card-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:.8rem;
+    margin-bottom:.8rem;
+  }
+  .card-num{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.7rem;
+    color:var(--ink-faint);
+    letter-spacing:.1em;
+  }
+  .card-cat{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.6rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    padding:.2rem .5rem;
+    border:1px solid;
+  }
+  .card-cat.bull{color:var(--bull);border-color:var(--bull);background:rgba(31,95,63,.05)}
+  .card-cat.bear{color:var(--bear);border-color:var(--bear);background:rgba(138,31,31,.05)}
+  .card-cat.dual{color:var(--gold);border-color:var(--gold);background:rgba(160,125,58,.05)}
+  .card-cat.neutral{color:var(--ink-faint);border-color:var(--ink-faint);background:rgba(107,93,78,.05)}
+
+  .card-title{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:1.6rem;
+    line-height:1.05;
+    letter-spacing:-.02em;
+    margin-bottom:.2rem;
+    font-variation-settings:"opsz" 36;
+  }
+  .card-vi{
+    font-family:'Spectral',serif;
+    font-style:italic;
+    font-size:.95rem;
+    color:var(--ink-soft);
+    margin-bottom:.4rem;
+  }
+  .card-id{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.65rem;
+    color:var(--ink-faint);
+    letter-spacing:.1em;
+    border-top:1px dotted var(--rule);
+    padding-top:.4rem;
+    margin-bottom:1rem;
+  }
+
+  .candle-stage{
+    background:
+      linear-gradient(180deg, rgba(196,179,148,.0), rgba(196,179,148,.12)),
+      var(--paper-deep);
+    border:1px solid var(--rule);
+    padding:.8rem;
+    margin-bottom:1.2rem;
+    position:relative;
+    min-height:170px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .candle-stage::before{
+    content:"";
+    position:absolute;
+    inset:.4rem;
+    background-image:
+      linear-gradient(to right, rgba(107,93,78,.12) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(107,93,78,.12) 1px, transparent 1px);
+    background-size:24px 20px;
+    pointer-events:none;
+  }
+  .candle-stage svg{
+    position:relative;
+    width:100%;
+    height:auto;
+    max-height:160px;
+    z-index:1;
+  }
+
+  .info{
+    font-size:.88rem;
+    line-height:1.55;
+  }
+  .info-row{
+    margin-bottom:.7rem;
+  }
+  .info-row:last-child{margin-bottom:0}
+  .info-label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.6rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--gold);
+    display:block;
+    margin-bottom:.15rem;
+    font-weight:700;
+  }
+  .info-row p{
+    color:var(--ink-soft);
+    font-size:.86rem;
+  }
+
+  /* ============ FOOTER ============ */
+  footer{
+    border-top:2px solid var(--ink);
+    padding:3rem 5vw 2rem;
+    background:var(--paper-deep);
+    text-align:center;
+  }
+  footer .ornament{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-size:1.5rem;
+    color:var(--gold);
+    margin-bottom:1rem;
+    letter-spacing:.5em;
+  }
+  footer .quote{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-weight:300;
+    font-size:1.2rem;
+    max-width:50ch;
+    margin:0 auto 1.5rem;
+    color:var(--ink-soft);
+    line-height:1.4;
+  }
+  footer .quote::before{content:"" ";color:var(--gold);font-size:2rem}
+  footer .quote::after{content:" "";color:var(--gold);font-size:2rem}
+  footer .attrib{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.7rem;
+    text-transform:uppercase;
+    letter-spacing:.2em;
+    color:var(--ink-faint);
+  }
+
+  /* No results */
+  .no-results{
+    grid-column:1/-1;
+    padding:5rem 2rem;
+    text-align:center;
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-size:1.5rem;
+    color:var(--ink-faint);
+  }
+
+  @media (max-width:640px){
+    nav.filters::before{display:none}
+    .search{margin-left:0;width:100%;order:99}
+    .search input{width:100%}
+    .lede{columns:1;column-rule:0}
+    .header-bottom{flex-direction:column;align-items:flex-start}
+    .stats{text-align:left}
+    main.grid{grid-template-columns:1fr;padding:0 4vw 3rem}
+    article.card{border-right:0}
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="meta-bar">
+    <span>Tập I · Bộ Sách Nến Nhật</span>
+    <span>TA-Lib Pattern Codex</span>
+    <span class="vol">61 mẫu hình</span>
+  </div>
+  <h1 class="title">Sáu Mươi Mốt <em>Bóng Nến</em></h1>
+  <p class="subtitle">Một bản đồ trực quan toàn bộ mẫu hình Candlestick được TA-Lib hỗ trợ — kèm đặc điểm nhận dạng, ý nghĩa giao dịch và phạm vi áp dụng thực tế.</p>
+  <div class="header-bottom">
+    <div class="lede">
+      <p>Nghệ thuật đọc nến do Munehisa Homma — một nhà buôn gạo Nhật Bản thế kỷ 18 — phát triển, ngày nay đã trở thành ngôn ngữ phổ thông của thị trường tài chính. Mỗi cây nến là một câu chuyện ngắn về cuộc giằng co giữa phe mua và phe bán trong một khoảng thời gian xác định.</p>
+      <p>Thư viện TA-Lib mã hoá 61 trong số những mẫu hình kinh điển ấy thành các hàm <code style="font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--bear)">CDL*</code>, trả về <code style="font-family:'JetBrains Mono',monospace;font-size:.85em">+100/-100/0</code> tương ứng với tín hiệu tăng, giảm hoặc trung tính.</p>
+    </div>
+    <div class="stats">
+      <strong id="visibleCount">61</strong>
+      Mẫu đang hiển thị / <span id="totalCount">61</span>
+    </div>
+  </div>
+</header>
+
+<nav class="filters" id="filterNav">
+  <button class="chip active" data-cat="all">Toàn bộ</button>
+  <button class="chip" data-cat="bull"><span class="dot"></span>Tăng giá</button>
+  <button class="chip" data-cat="bear"><span class="dot"></span>Giảm giá</button>
+  <button class="chip" data-cat="dual"><span class="dot"></span>Hai chiều</button>
+  <button class="chip" data-cat="neutral"><span class="dot"></span>Trung tính</button>
+  <label class="search">
+    <input type="text" id="searchInput" placeholder="Tìm theo tên (VD: hammer, doji…)">
+  </label>
+</nav>
+
+<main class="grid" id="grid"></main>
+
+<footer>
+  <div class="ornament">⁂ &nbsp; ❦ &nbsp; ⁂</div>
+  <p class="quote">Thị trường giống như sóng biển — có lúc nâng thuyền lên, có lúc nhấn chìm. Cây nến chỉ ghi lại dấu chân của sóng.</p>
+  <p class="attrib">Phỏng theo Sakata Goho Wakaran · Munehisa Homma · 1755</p>
+</footer>
+
+<script>
+/* ============================================================
+   PATTERN DATA — 61 mẫu hình
+   candles: [open, close, high, low]
+   cat: bull | bear | dual | neutral
+   ============================================================ */
+const patterns = [
+  {id:'CDL2CROWS', name:'Two Crows', vi:'Hai Con Quạ', cat:'bear',
+    candles:[[2,6,6.4,1.8],[6.8,5.5,7.0,5.4],[6.2,3.8,6.4,3.7]],
+    identify:'Sau xu hướng tăng: nến tăng dài, rồi nến giảm gap-up, rồi nến giảm thứ hai mở trong thân nến giảm trước và đóng sâu vào thân nến tăng đầu tiên.',
+    meaning:'Báo hiệu đảo chiều giảm. Phe bán đã từ chối mức giá cao hơn và đang giành lại quyền kiểm soát.',
+    scope:'Cuối xu hướng tăng kéo dài. Tin cậy nhất ở khung D1 trở lên; nên xác nhận bằng nến giảm thứ tư.'},
+
+  {id:'CDL3BLACKCROWS', name:'Three Black Crows', vi:'Ba Con Quạ Đen', cat:'bear',
+    candles:[[7.5,5,7.6,4.9],[6,3.5,6.1,3.4],[4.5,2,4.6,1.9]],
+    identify:'Ba nến giảm dài liên tiếp, mỗi nến mở cửa trong thân nến trước và đóng cửa gần đáy phiên.',
+    meaning:'Tín hiệu đảo chiều giảm rất mạnh sau xu hướng tăng — phe bán áp đảo trong nhiều phiên liên tục.',
+    scope:'Hiệu lực cao ở vùng đỉnh hoặc sau giai đoạn tăng kéo dài. Cẩn trọng khi vào lệnh muộn vì giá đã giảm sâu.'},
+
+  {id:'CDL3INSIDE', name:'Three Inside Up/Down', vi:'Ba Trong - Tăng/Giảm', cat:'dual',
+    candles:[[2,7,7.2,1.8],[6,4,6.2,3.8],[4.2,8,8.2,4]],
+    identify:'Phiên 1: nến mẹ dài. Phiên 2: nến Harami nhỏ nằm gọn trong thân nến mẹ và ngược chiều. Phiên 3: nến cùng chiều nến 2, đóng vượt nến mẹ.',
+    meaning:'Xác nhận đảo chiều của Harami. Nến 3 là dấu xác nhận sự thay đổi quyền kiểm soát.',
+    scope:'Ở vùng đỉnh (bearish) hoặc đáy (bullish). Độ tin cậy trung bình - cao, đặc biệt khi có khối lượng tăng.'},
+
+  {id:'CDL3LINESTRIKE', name:'Three-Line Strike', vi:'Ba Đường Đột Kích', cat:'dual',
+    candles:[[2,4,4.2,1.8],[3.5,5.5,5.7,3.4],[5,7,7.2,4.8],[7.5,1.5,7.7,1.4]],
+    identify:'Ba nến cùng chiều liên tiếp, sau đó một nến ngược chiều dài bao trùm cả ba nến trước.',
+    meaning:'Trên lý thuyết là tín hiệu đảo chiều nhưng thống kê cho thấy thường là pattern tiếp diễn xu hướng cũ.',
+    scope:'Hiếm gặp. Nên dùng kết hợp với chỉ báo khối lượng và mức hỗ trợ/kháng cự để xác định ý nghĩa thật.'},
+
+  {id:'CDL3OUTSIDE', name:'Three Outside Up/Down', vi:'Ba Ngoài - Tăng/Giảm', cat:'dual',
+    candles:[[6,4,6.2,3.8],[3.5,7,7.2,3.3],[6.8,8.5,8.7,6.7]],
+    identify:'Phiên 1: nến nhỏ. Phiên 2: nến Engulfing ngược chiều, bao trùm nến 1. Phiên 3: nến cùng chiều nến 2, đi tiếp.',
+    meaning:'Xác nhận của mẫu Engulfing — đảo chiều mạnh khi nến 3 củng cố hướng đi mới.',
+    scope:'Ở các điểm đảo chiều rõ rệt. Tin cậy cao khi xuất hiện ở vùng quá mua/quá bán.'},
+
+  {id:'CDL3STARSINSOUTH', name:'Three Stars in the South', vi:'Ba Ngôi Sao Phương Nam', cat:'bull',
+    candles:[[7,3,7.2,1.5],[6,4,6.1,3.5],[5.2,4.5,5.3,4.3]],
+    identify:'Ba nến giảm với thân ngắn dần và bóng dưới ngắn dần — đáy phiên sau cao hơn đáy phiên trước.',
+    meaning:'Áp lực bán đang cạn kiệt sau xu hướng giảm — báo hiệu khả năng đảo chiều tăng.',
+    scope:'Cực kỳ hiếm gặp. Phải xác nhận bằng nến tăng tiếp theo trước khi vào lệnh.'},
+
+  {id:'CDL3WHITESOLDIERS', name:'Three Advancing White Soldiers', vi:'Ba Chàng Lính Trắng', cat:'bull',
+    candles:[[2,4.5,4.7,1.9],[4,6.5,6.7,3.9],[6,8.5,8.7,5.9]],
+    identify:'Ba nến tăng dài liên tiếp, mỗi nến mở trong thân nến trước và đóng gần đỉnh phiên với bóng trên ngắn.',
+    meaning:'Tín hiệu đảo chiều tăng rất mạnh — phe mua kiểm soát trong nhiều phiên liền.',
+    scope:'Sau xu hướng giảm hoặc tích luỹ. Cẩn trọng vào muộn vì giá có thể đã quá mua sau ba phiên.'},
+
+  {id:'CDLABANDONEDBABY', name:'Abandoned Baby', vi:'Em Bé Bị Bỏ Rơi', cat:'dual',
+    candles:[[2,6,6.3,1.9],[7,7.05,7.4,6.8],[6,3,6.2,2.8]],
+    identify:'Nến lớn theo xu hướng → nến Doji cách hẳn (gap cả hai phía) → nến lớn ngược chiều cũng cách Doji.',
+    meaning:'Mẫu đảo chiều mạnh và rất hiếm. Doji "bị bỏ rơi" giữa hai khoảng trống thể hiện sự đảo cực đột ngột.',
+    scope:'Có cả phiên bản tăng (đáy) và giảm (đỉnh). Hiệu lực cao nhưng tần suất thấp, đặc biệt hiếm trên thị trường 24/7.'},
+
+  {id:'CDLADVANCEBLOCK', name:'Advance Block', vi:'Khối Cản Tiến', cat:'bear',
+    candles:[[2,5,5.2,1.9],[4,6.5,6.9,3.9],[6,7,7.6,5.9]],
+    identify:'Ba nến tăng nhưng thân ngắn dần và bóng trên dài dần — phe mua ngày càng đuối sức.',
+    meaning:'Cảnh báo xu hướng tăng đang suy yếu — khả năng đảo chiều giảm sắp xảy ra.',
+    scope:'Vùng đỉnh sau đợt tăng. Khác với Three White Soldiers ở chỗ đà tăng yếu dần. Cần xác nhận thêm.'},
+
+  {id:'CDLBELTHOLD', name:'Belt-hold', vi:'Đai Giữ', cat:'dual',
+    candles:[[2,7,7.1,2]],
+    identify:'Nến tăng (white belt-hold): mở ở đáy phiên, không có bóng dưới. Nến giảm (black belt-hold): mở ở đỉnh phiên, không có bóng trên.',
+    meaning:'Cây nến mở cửa cực mạnh và giữ được hướng đi suốt phiên — thể hiện ý chí thị trường rõ ràng.',
+    scope:'Sau xu hướng ngược chiều. Mẫu đơn nên cần kết hợp với context xu hướng và vùng giá quan trọng.'},
+
+  {id:'CDLBREAKAWAY', name:'Breakaway', vi:'Bứt Phá', cat:'dual',
+    candles:[[8,6,8.2,5.8],[5,4,5.2,3.8],[3.8,3.5,4,3.3],[3.4,3,3.5,2.8],[3,5.5,5.7,2.9]],
+    identify:'5 nến: nến 1 dài cùng xu hướng, gap, ba nến nhỏ tiếp tục, nến 5 dài đảo chiều phủ lấp gap.',
+    meaning:'Báo hiệu đảo chiều khi xu hướng bị cạn kiệt — gap được lấp lại bởi lực ngược chiều.',
+    scope:'Cuối xu hướng kéo dài (cả tăng và giảm). Cần kiên nhẫn vì pattern hoàn chỉnh sau 5 phiên.'},
+
+  {id:'CDLCLOSINGMARUBOZU', name:'Closing Marubozu', vi:'Marubozu Đóng', cat:'dual',
+    candles:[[2,7,7.5,2]],
+    identify:'Nến có thân dài, không có bóng ở phía đóng cửa. Nến tăng: không bóng trên. Nến giảm: không bóng dưới.',
+    meaning:'Phe thắng cuộc đóng phiên ở mức cực đoan — xác nhận sức mạnh của hướng đi đó.',
+    scope:'Có ý nghĩa khi xuất hiện ở vùng phá vỡ hoặc xác nhận xu hướng. Mẫu đơn — cần context.'},
+
+  {id:'CDLCONCEALBABYSWALL', name:'Concealing Baby Swallow', vi:'Chim Én Giấu Con', cat:'bull',
+    candles:[[7,5,7.1,4.9],[6,4,6.1,3.9],[5,3,5.5,3],[4,2.5,5,2.5]],
+    identify:'4 nến giảm: hai Marubozu giảm đầu, nến 3 có bóng trên xâm vào nến 2, nến 4 bao trùm hoàn toàn nến 3.',
+    meaning:'Sau bán tháo mạnh, sự xuất hiện đột ngột của lực mua "che giấu" tín hiệu — báo đáy.',
+    scope:'Cực kỳ hiếm gặp. Tin cậy cao về mặt lý thuyết nhưng cần xác nhận bằng nến tăng tiếp theo.'},
+
+  {id:'CDLCOUNTERATTACK', name:'Counterattack Lines', vi:'Đường Phản Công', cat:'dual',
+    candles:[[8,4,8.2,3.8],[2,4,4.2,1.8]],
+    identify:'Phiên 1: nến dài theo xu hướng. Phiên 2: nến dài ngược chiều mở cửa cách xa nhưng đóng gần bằng giá đóng cửa phiên 1.',
+    meaning:'Phe ngược chiều đã phản công thành công, đẩy giá quay về điểm đóng cửa phiên trước.',
+    scope:'Tương tự Piercing/Dark Cloud Cover nhưng yếu hơn vì giá đóng cửa chỉ chạm chứ không xuyên thân.'},
+
+  {id:'CDLDARKCLOUDCOVER', name:'Dark Cloud Cover', vi:'Mây Đen Che Phủ', cat:'bear',
+    candles:[[2,7,7.2,1.9],[7.8,4,7.9,3.9]],
+    identify:'Phiên 1: nến tăng dài. Phiên 2: nến giảm mở cao hơn đỉnh phiên 1 (gap-up) nhưng đóng cửa sâu trong nửa dưới thân nến 1.',
+    meaning:'Phe mua thất bại sau gap-up; phe bán giành lại quyền kiểm soát — đảo chiều giảm.',
+    scope:'Vùng đỉnh sau xu hướng tăng. Tin cậy tăng khi giá đóng phiên 2 càng sâu vào thân nến 1.'},
+
+  {id:'CDLDOJI', name:'Doji', vi:'Doji', cat:'neutral',
+    candles:[[5,5.05,7,3]],
+    identify:'Giá mở và đóng gần như bằng nhau, tạo thân nến rất mỏng (như dấu cộng).',
+    meaning:'Sự lưỡng lự — không bên nào kiểm soát phiên giao dịch. Có thể báo hiệu đảo chiều nếu xuất hiện sau xu hướng dài.',
+    scope:'Phổ biến ở mọi khung thời gian. Ý nghĩa phụ thuộc hoàn toàn vào ngữ cảnh trước đó và nến xác nhận.'},
+
+  {id:'CDLDOJISTAR', name:'Doji Star', vi:'Sao Doji', cat:'dual',
+    candles:[[2,6,6.2,1.9],[6.8,6.85,7.1,6.5]],
+    identify:'Nến lớn theo xu hướng → Doji có gap so với thân nến trước.',
+    meaning:'Tín hiệu cảnh báo đảo chiều mạnh — sau đà mạnh xuất hiện sự lưỡng lự cực điểm.',
+    scope:'Đỉnh hoặc đáy. Cần nến xác nhận tiếp theo (hình thành Morning/Evening Doji Star) để giao dịch.'},
+
+  {id:'CDLDRAGONFLYDOJI', name:'Dragonfly Doji', vi:'Doji Chuồn Chuồn', cat:'bull',
+    candles:[[5,5.05,5.1,2]],
+    identify:'Doji có bóng dưới rất dài và gần như không có bóng trên — mở, đóng và đỉnh đều ở phía trên.',
+    meaning:'Phe bán đẩy giá xuống sâu nhưng phe mua kéo trở lại hoàn toàn — báo đáy tiềm năng.',
+    scope:'Hiệu lực cao nhất ở đáy xu hướng giảm. Cần xác nhận bằng nến tăng tiếp theo.'},
+
+  {id:'CDLENGULFING', name:'Engulfing Pattern', vi:'Nhấn Chìm', cat:'dual',
+    candles:[[5,4,5.2,3.8],[3.5,6.5,6.7,3.3]],
+    identify:'Phiên 2 có thân nến lớn ngược chiều và bao trùm hoàn toàn thân nến phiên 1 (không tính bóng).',
+    meaning:'Một trong những mẫu đảo chiều mạnh nhất — phe mới đã hoàn toàn áp đảo phe cũ trong một phiên.',
+    scope:'Vùng đỉnh (bearish engulfing) hoặc đáy (bullish engulfing). Tin cậy cao, đặc biệt khi khối lượng phiên 2 lớn.'},
+
+  {id:'CDLEVENINGDOJISTAR', name:'Evening Doji Star', vi:'Sao Hôm Doji', cat:'bear',
+    candles:[[2,6,6.2,1.9],[6.8,6.85,7.1,6.5],[6.4,3,6.5,2.8]],
+    identify:'Nến tăng dài → Doji gap-up → nến giảm dài đóng sâu vào thân nến 1.',
+    meaning:'Phiên bản mạnh hơn của Evening Star — sự lưỡng lự ở đỉnh kèm Doji báo hiệu đảo chiều rõ rệt.',
+    scope:'Đỉnh xu hướng tăng. Một trong những mẫu đảo chiều giảm tin cậy nhất.'},
+
+  {id:'CDLEVENINGSTAR', name:'Evening Star', vi:'Sao Hôm', cat:'bear',
+    candles:[[2,6,6.2,1.9],[6.8,7,7.2,6.7],[6.5,3,6.6,2.9]],
+    identify:'Nến tăng dài → nến nhỏ (sao) gap-up → nến giảm dài đóng sâu vào thân nến 1.',
+    meaning:'Phe mua đuối sức, phe bán đảo chiều mạnh — tín hiệu đỉnh kinh điển.',
+    scope:'Đỉnh xu hướng tăng. Nến thứ ba càng dài và càng đóng sâu thì tín hiệu càng mạnh.'},
+
+  {id:'CDLGAPSIDESIDEWHITE', name:'Up/Down-gap Side-by-side White Lines', vi:'Hai Nến Trắng Sóng Đôi Có Gap', cat:'dual',
+    candles:[[2,4,4.2,1.9],[5,7,7.2,4.9],[5.1,7.1,7.3,5]],
+    identify:'Sau gap, hai nến tăng có kích thước và mức mở/đóng tương đương nhau, nằm sát cạnh nhau.',
+    meaning:'Tín hiệu tiếp diễn — gap đã được duy trì và phe đang kiểm soát tiếp tục vững.',
+    scope:'Trong xu hướng đang chạy. Báo hiệu xu hướng còn tiếp tục — không phải tín hiệu đảo chiều.'},
+
+  {id:'CDLGRAVESTONEDOJI', name:'Gravestone Doji', vi:'Doji Bia Mộ', cat:'bear',
+    candles:[[5,5.05,8,4.95]],
+    identify:'Doji có bóng trên rất dài và gần như không có bóng dưới — mở, đóng và đáy đều ở phía dưới.',
+    meaning:'Phe mua đẩy giá lên cao nhưng phe bán dìm trở lại hoàn toàn — báo đỉnh tiềm năng.',
+    scope:'Hiệu lực cao nhất ở đỉnh xu hướng tăng. Đối ngược của Dragonfly Doji.'},
+
+  {id:'CDLHAMMER', name:'Hammer', vi:'Búa', cat:'bull',
+    candles:[[6,6.5,6.7,3]],
+    identify:'Thân nhỏ ở phần trên, bóng dưới dài ít nhất gấp đôi thân, bóng trên rất ngắn hoặc không có. Xuất hiện sau xu hướng giảm.',
+    meaning:'Phe bán đẩy giá xuống nhưng phe mua hấp thụ và kéo lên — báo đáy tiềm năng.',
+    scope:'Đáy xu hướng giảm. Tin cậy cao khi nến tiếp theo là nến tăng xác nhận và có khối lượng lớn.'},
+
+  {id:'CDLHANGINGMAN', name:'Hanging Man', vi:'Người Treo Cổ', cat:'bear',
+    candles:[[6,6.5,6.7,3]],
+    identify:'Hình dạng giống Hammer (thân nhỏ trên, bóng dưới dài) nhưng xuất hiện sau xu hướng tăng.',
+    meaning:'Cảnh báo phe bán đã bắt đầu xuất hiện ở đỉnh — sức mạnh xu hướng tăng đang lung lay.',
+    scope:'Đỉnh xu hướng tăng. Bắt buộc cần nến giảm xác nhận tiếp theo, vì thân nến nhỏ chưa đủ tin cậy.'},
+
+  {id:'CDLHARAMI', name:'Harami Pattern', vi:'Người Mẹ Mang Thai', cat:'dual',
+    candles:[[2,7,7.2,1.9],[6,4.5,6.2,4.3]],
+    identify:'Nến mẹ lớn → nến con nhỏ ngược chiều, nằm gọn trong thân nến mẹ.',
+    meaning:'Đà tăng/giảm đang chững lại; có thể báo hiệu đảo chiều hoặc tích luỹ trước khi tiếp diễn.',
+    scope:'Cả đỉnh và đáy. Độ tin cậy trung bình — luôn cần nến xác nhận tiếp theo.'},
+
+  {id:'CDLHARAMICROSS', name:'Harami Cross Pattern', vi:'Harami Chữ Thập', cat:'dual',
+    candles:[[2,7,7.2,1.9],[5.5,5.55,6,5]],
+    identify:'Nến mẹ lớn → nến con là Doji, nằm gọn trong thân nến mẹ.',
+    meaning:'Phiên bản mạnh hơn của Harami — Doji nhấn mạnh sự lưỡng lự cực điểm sau đà mạnh.',
+    scope:'Cả đỉnh và đáy. Tin cậy hơn Harami thường, đặc biệt ở khung thời gian lớn.'},
+
+  {id:'CDLHIGHWAVE', name:'High-Wave Candle', vi:'Sóng Cao', cat:'neutral',
+    candles:[[5,5.3,8,2]],
+    identify:'Thân nến rất nhỏ với bóng trên và bóng dưới đều rất dài.',
+    meaning:'Sự bất ổn cực mạnh — cả hai phe đều quyết liệt nhưng không bên nào thắng. Báo hiệu thay đổi.',
+    scope:'Khi xuất hiện đơn lẻ thường là tín hiệu đảo chiều hoặc tích luỹ. Cần phối hợp với S/R quan trọng.'},
+
+  {id:'CDLHIKKAKE', name:'Hikkake Pattern', vi:'Bẫy Hikkake', cat:'dual',
+    candles:[[2,5,5.5,1.5],[3,4,4.2,2.8],[4.3,5,5.2,4.2],[5.1,5.8,6,4.1],[5.7,1.5,5.9,1.4]]
+   ,
+    identify:'Phiên 1-2: tạo Inside Bar. Phiên 3-4: phá vỡ giả theo một hướng. Phiên 5: đảo chiều mạnh phá theo hướng ngược lại.',
+    meaning:'Bẫy phá vỡ giả — bắt cá nhỏ rồi đảo chiều thực sự. Tên "hikkake" nghĩa là "mắc bẫy".',
+    scope:'Trong vùng tích luỹ hoặc khi sắp có động thái lớn. Tin cậy khá cao nhưng cần kiên nhẫn.'},
+
+  {id:'CDLHIKKAKEMOD', name:'Modified Hikkake Pattern', vi:'Hikkake Cải Tiến', cat:'dual',
+    candles:[[2,4,4.2,1.9],[3,5,5.2,2.9],[4,4.5,4.7,3.8],[4.6,5.5,5.7,4],[5.3,1.5,5.5,1.4]],
+    identify:'Tương tự Hikkake nhưng có thêm nến chuẩn bị trước Inside Bar — yêu cầu khắt khe hơn về xu hướng trước đó.',
+    meaning:'Phiên bản chặt chẽ hơn của Hikkake; ít tín hiệu giả hơn nhờ điều kiện chuẩn bị.',
+    scope:'Tin cậy cao hơn Hikkake gốc. Phù hợp cho trader theo trend hoặc breakout.'},
+
+  {id:'CDLHOMINGPIGEON', name:'Homing Pigeon', vi:'Bồ Câu Hồi Hương', cat:'bull',
+    candles:[[8,4,8.2,3.9],[6.5,5,6.6,4.9]],
+    identify:'Hai nến giảm: nến 1 dài, nến 2 ngắn nằm gọn trong thân nến 1 (Harami giảm-giảm).',
+    meaning:'Đà giảm đang yếu lại — phe bán không thể duy trì áp lực, chuẩn bị đảo chiều tăng.',
+    scope:'Đáy xu hướng giảm. Cần nến tăng xác nhận tiếp theo để vào lệnh.'},
+
+  {id:'CDLIDENTICAL3CROWS', name:'Identical Three Crows', vi:'Ba Con Quạ Đồng Dạng', cat:'bear',
+    candles:[[8,5,8.1,4.9],[5,3,5.05,2.9],[3,1,3.05,0.9]],
+    identify:'Ba nến giảm dài liên tiếp, mỗi nến mở ở đúng giá đóng cửa của nến trước (không có gap).',
+    meaning:'Phiên bản nghiêm khắc hơn của Three Black Crows — đà giảm cực kỳ liền mạch.',
+    scope:'Đỉnh xu hướng tăng. Tín hiệu mạnh nhưng hiếm vì điều kiện mở cửa = đóng cửa trước rất khắt khe.'},
+
+  {id:'CDLINNECK', name:'In-Neck Pattern', vi:'Trong Cổ', cat:'bear',
+    candles:[[8,4,8.1,3.9],[3.5,4.05,4.2,3.4]],
+    identify:'Phiên 1: nến giảm dài. Phiên 2: nến tăng nhỏ mở dưới đáy nến 1 và đóng cửa hơi cao hơn giá đóng cửa nến 1.',
+    meaning:'Phe mua phản ứng yếu ớt; xu hướng giảm vẫn còn nguyên — tín hiệu tiếp diễn giảm.',
+    scope:'Trong xu hướng giảm. Tín hiệu rằng đợt phục hồi không đủ sức — vào lệnh bán có lợi thế.'},
+
+  {id:'CDLINVERTEDHAMMER', name:'Inverted Hammer', vi:'Búa Ngược', cat:'bull',
+    candles:[[3.5,4,7,3.3]],
+    identify:'Thân nhỏ ở phần dưới, bóng trên dài ít nhất gấp đôi thân, bóng dưới rất ngắn. Xuất hiện sau xu hướng giảm.',
+    meaning:'Phe mua thử đẩy giá lên (bị từ chối phiên này) nhưng đã có dấu hiệu xuất hiện — báo đáy.',
+    scope:'Đáy xu hướng giảm. Tín hiệu yếu hơn Hammer; bắt buộc cần nến tăng xác nhận tiếp theo.'},
+
+  {id:'CDLKICKING', name:'Kicking', vi:'Cú Đá', cat:'dual',
+    candles:[[7,3,7,3],[5,9,9,5]],
+    identify:'Hai Marubozu ngược chiều, có gap giữa chúng. Không quan tâm xu hướng trước đó.',
+    meaning:'Cú đá đảo chiều cực mạnh — sự thay đổi tâm lý đột ngột và quyết liệt.',
+    scope:'Có thể xuất hiện ở bất kỳ vị trí nào. Tin cậy rất cao nhưng tần suất thấp.'},
+
+  {id:'CDLKICKINGBYLENGTH', name:'Kicking - by length', vi:'Cú Đá (theo độ dài)', cat:'dual',
+    candles:[[7,3,7,3],[5,9.5,9.5,5]],
+    identify:'Giống Kicking nhưng hướng tín hiệu được xác định bởi Marubozu nào dài hơn — dài hơn = thắng.',
+    meaning:'Phe có Marubozu dài hơn được coi là chiếm ưu thế áp đảo.',
+    scope:'Biến thể của Kicking. Hữu ích khi cả hai cây nến đều rất dài, gây khó xác định bên thắng.'},
+
+  {id:'CDLLADDERBOTTOM', name:'Ladder Bottom', vi:'Đáy Hình Thang', cat:'bull',
+    candles:[[8,6,8.1,5.9],[6.5,4.5,6.6,4.4],[5,3,5.1,2.9],[3.5,3,4.5,2.9],[3.2,6.5,6.7,3.1]],
+    identify:'Ba nến giảm đầu, nến 4 giảm có bóng trên dài bất thường, nến 5 tăng dài mở trên thân nến 4.',
+    meaning:'Sau giai đoạn giảm bậc thang, sự xuất hiện đột ngột của lực mua mạnh — báo đáy mạnh.',
+    scope:'Đáy xu hướng giảm dài. Hiếm gặp nhưng tin cậy cao khi hoàn chỉnh.'},
+
+  {id:'CDLLONGLEGGEDDOJI', name:'Long Legged Doji', vi:'Doji Chân Dài', cat:'neutral',
+    candles:[[5,5.05,8,2]],
+    identify:'Doji có cả bóng trên và bóng dưới đều rất dài — thân nến cực mỏng ở giữa.',
+    meaning:'Sự lưỡng lự cực điểm — cả hai phe đều thử nghiệm mạnh nhưng kết phiên hoà.',
+    scope:'Báo hiệu tiềm năng đảo chiều khi xuất hiện sau xu hướng dài. Cần xác nhận.'},
+
+  {id:'CDLLONGLINE', name:'Long Line Candle', vi:'Nến Dài', cat:'dual',
+    candles:[[2,8,8.3,1.9]],
+    identify:'Nến có thân rất dài (lớn hơn đáng kể so với các nến gần đây) với bóng trên/dưới ngắn.',
+    meaning:'Một bên áp đảo hoàn toàn trong phiên — xác nhận sức mạnh xu hướng đó.',
+    scope:'Có ý nghĩa khi xuất hiện ở vùng phá vỡ hoặc xác nhận. Mẫu đơn — phụ thuộc context.'},
+
+  {id:'CDLMARUBOZU', name:'Marubozu', vi:'Marubozu (Đầu Trọc)', cat:'dual',
+    candles:[[2,8,8,2]],
+    identify:'Nến có thân dài và hoàn toàn không có bóng (cả trên và dưới). "Marubozu" nghĩa là "đầu trọc" trong tiếng Nhật.',
+    meaning:'Một bên kiểm soát tuyệt đối từ đầu đến cuối phiên — biểu hiện sức mạnh thuần khiết.',
+    scope:'Tín hiệu xác nhận xu hướng rất mạnh. Khi xuất hiện sau xu hướng ngược, có thể là khởi đầu đảo chiều.'},
+
+  {id:'CDLMATCHINGLOW', name:'Matching Low', vi:'Đáy Tương Đồng', cat:'bull',
+    candles:[[8,4,8.1,3.9],[6.5,4,6.6,3.95]],
+    identify:'Hai nến giảm liên tiếp có cùng giá đóng cửa (đáy thân) — phe bán không thể đẩy thấp hơn được nữa.',
+    meaning:'Hỗ trợ kép tại cùng một mức — báo hiệu vùng đáy tiềm năng.',
+    scope:'Trong xu hướng giảm. Tin cậy trung bình — cần xác nhận bằng nến tăng tiếp theo.'},
+
+  {id:'CDLMATHOLD', name:'Mat Hold', vi:'Giữ Thảm', cat:'bull',
+    candles:[[2,7,7.2,1.9],[7.5,7,7.6,6.9],[7.1,6.5,7.2,6.4],[6.6,6,6.7,5.9],[6.1,9,9.2,6]],
+    identify:'Nến tăng dài → gap-up → ba nến nhỏ điều chỉnh xuống nhưng giữ trên đáy nến 1 → nến tăng dài tiếp tục.',
+    meaning:'Đợt nghỉ ngắn để củng cố — xu hướng tăng tiếp diễn mạnh sau khi vượt qua áp lực bán nhẹ.',
+    scope:'Trong xu hướng tăng mạnh. Tin cậy cao — báo hiệu tiếp tục tăng dài hạn.'},
+
+  {id:'CDLMORNINGDOJISTAR', name:'Morning Doji Star', vi:'Sao Mai Doji', cat:'bull',
+    candles:[[8,4,8.2,3.9],[3.5,3.55,3.8,3.2],[3.7,7,7.2,3.6]],
+    identify:'Nến giảm dài → Doji gap-down → nến tăng dài đóng sâu vào thân nến 1.',
+    meaning:'Phiên bản mạnh hơn của Morning Star — Doji ở đáy nhấn mạnh sự đảo cực rõ rệt.',
+    scope:'Đáy xu hướng giảm. Tin cậy rất cao — một trong những mẫu báo đáy mạnh nhất.'},
+
+  {id:'CDLMORNINGSTAR', name:'Morning Star', vi:'Sao Mai', cat:'bull',
+    candles:[[8,4,8.2,3.9],[3.5,3.2,3.8,3],[3.5,7,7.2,3.4]],
+    identify:'Nến giảm dài → nến nhỏ (sao) gap-down → nến tăng dài đóng sâu vào thân nến 1.',
+    meaning:'Phe bán đuối sức, phe mua đảo chiều mạnh — tín hiệu đáy kinh điển.',
+    scope:'Đáy xu hướng giảm. Nến thứ ba càng dài và đóng càng sâu thì tín hiệu càng mạnh.'},
+
+  {id:'CDLONNECK', name:'On-Neck Pattern', vi:'Trên Cổ', cat:'bear',
+    candles:[[8,4,8.1,3.9],[3.5,3.95,4.1,3.4]],
+    identify:'Phiên 1: nến giảm dài. Phiên 2: nến tăng nhỏ mở dưới đáy nến 1 và đóng đúng tại đáy của nến 1.',
+    meaning:'Phục hồi cực yếu — phe mua không vượt qua được mức đáy phiên trước. Tiếp diễn xu hướng giảm.',
+    scope:'Trong xu hướng giảm. Phiên bản yếu hơn của In-Neck nhưng cùng ý nghĩa tiếp diễn.'},
+
+  {id:'CDLPIERCING', name:'Piercing Pattern', vi:'Xuyên Thấu', cat:'bull',
+    candles:[[8,4,8.2,3.9],[3.4,7,7.2,3.3]],
+    identify:'Phiên 1: nến giảm dài. Phiên 2: nến tăng mở dưới đáy phiên 1 và đóng cửa trên trung điểm thân nến 1.',
+    meaning:'Phe mua đẩy giá vượt qua nửa thân nến giảm — đảo chiều tăng tiềm năng.',
+    scope:'Đáy xu hướng giảm. Đối ngược của Dark Cloud Cover; tin cậy tăng theo độ "xuyên" của nến 2.'},
+
+  {id:'CDLRICKSHAWMAN', name:'Rickshaw Man', vi:'Người Kéo Xe', cat:'neutral',
+    candles:[[5,5.1,8,2]],
+    identify:'Long Legged Doji nhưng thân nến nằm gần trung điểm của khoảng giá phiên — đối xứng cực cao.',
+    meaning:'Sự lưỡng lự hoàn hảo — thị trường hoàn toàn chưa quyết định hướng đi.',
+    scope:'Báo hiệu sắp có động thái lớn. Cần kết hợp với phá vỡ hoặc S/R để giao dịch.'},
+
+  {id:'CDLRISEFALL3METHODS', name:'Rising/Falling Three Methods', vi:'Ba Bước Tăng/Giảm', cat:'dual',
+    candles:[[2,7,7.2,1.9],[6.8,6.3,7,6.2],[6.4,5.8,6.5,5.7],[6,5.3,6.1,5.2],[5.4,8,8.2,5.3]],
+    identify:'Nến lớn theo xu hướng → ba nến nhỏ điều chỉnh ngược chiều (nằm trong khoảng nến 1) → nến lớn cùng chiều nến 1 vượt đỉnh nến 1.',
+    meaning:'Đợt nghỉ giữa xu hướng để tích luỹ — xu hướng chính tiếp tục mạnh mẽ.',
+    scope:'Trong xu hướng mạnh đang chạy. Tin cậy cao — pattern tiếp diễn kinh điển.'},
+
+  {id:'CDLSEPARATINGLINES', name:'Separating Lines', vi:'Đường Phân Cách', cat:'dual',
+    candles:[[7,4,7.1,3.9],[4,8,8.2,3.9]],
+    identify:'Phiên 2 mở cửa đúng tại giá mở cửa phiên 1 nhưng đi ngược chiều với thân nến dài.',
+    meaning:'Sau đợt điều chỉnh, xu hướng chính được tái khẳng định mạnh mẽ — tín hiệu tiếp diễn.',
+    scope:'Trong xu hướng đang chạy có pullback. Tin cậy cao khi xu hướng nền tảng đã rõ ràng.'},
+
+  {id:'CDLSHOOTINGSTAR', name:'Shooting Star', vi:'Sao Băng', cat:'bear',
+    candles:[[3.5,4,7,3.3]],
+    identify:'Hình dạng giống Inverted Hammer (thân nhỏ dưới, bóng trên dài) nhưng xuất hiện sau xu hướng tăng.',
+    meaning:'Phe mua đẩy giá lên cao nhưng bị từ chối mạnh — báo đỉnh tiềm năng.',
+    scope:'Đỉnh xu hướng tăng. Tin cậy tăng khi có gap-up so với nến trước đó.'},
+
+  {id:'CDLSHORTLINE', name:'Short Line Candle', vi:'Nến Ngắn', cat:'neutral',
+    candles:[[5,5.5,5.7,4.8]],
+    identify:'Nến có thân rất ngắn so với các nến gần đây, bóng trên/dưới cũng ngắn.',
+    meaning:'Hoạt động yếu — không bên nào áp đảo trong phiên này.',
+    scope:'Mẫu đơn — ít ý nghĩa độc lập. Thường là một phần của các pattern lớn hơn (Harami, sao…).'},
+
+  {id:'CDLSPINNINGTOP', name:'Spinning Top', vi:'Con Quay', cat:'neutral',
+    candles:[[5,5.4,7,3]],
+    identify:'Thân nến nhỏ với bóng trên và bóng dưới đều khá dài, gần bằng nhau.',
+    meaning:'Sự cân bằng giữa hai phe — không có người chiến thắng rõ ràng trong phiên.',
+    scope:'Sau xu hướng dài có thể báo đảo chiều. Trong tích luỹ thì là tín hiệu tiếp tục lưỡng lự.'},
+
+  {id:'CDLSTALLEDPATTERN', name:'Stalled Pattern', vi:'Bế Tắc (Deliberation)', cat:'bear',
+    candles:[[2,5,5.2,1.9],[4,7,7.2,3.9],[6.7,7.2,7.5,6.5]],
+    identify:'Hai nến tăng dài → nến tăng thứ ba có thân nhỏ, mở cửa gần đỉnh nến 2 (như sao).',
+    meaning:'Đà tăng đang chững lại — sau hai phiên mạnh, phiên thứ ba thiếu lực — cảnh báo đảo chiều.',
+    scope:'Đỉnh xu hướng tăng. Cần xác nhận bằng nến giảm tiếp theo.'},
+
+  {id:'CDLSTICKSANDWICH', name:'Stick Sandwich', vi:'Bánh Mì Kẹp', cat:'bull',
+    candles:[[7,4,7.1,3.9],[3.5,5.5,5.7,3.4],[6,4,6.1,3.95]],
+    identify:'Hai nến giảm với cùng giá đóng cửa, kẹp giữa là một nến tăng — như "lát thịt" trong sandwich.',
+    meaning:'Hai lần thử phá đáy đều thất bại tại cùng một mức — vùng hỗ trợ rất mạnh.',
+    scope:'Đáy xu hướng giảm. Hiếm gặp nhưng tin cậy khi hoàn chỉnh.'},
+
+  {id:'CDLTAKURI', name:'Takuri Line', vi:'Takuri', cat:'bull',
+    candles:[[5,5.05,5.1,1]],
+    identify:'Nến có dạng Dragonfly Doji nhưng bóng dưới đặc biệt dài (thường gấp 3 lần thân hoặc hơn).',
+    meaning:'Phe bán đẩy giá xuống cực sâu nhưng phe mua kéo lên hoàn toàn — báo đáy mạnh.',
+    scope:'Đáy xu hướng giảm. Phiên bản cực đoan của Dragonfly Doji.'},
+
+  {id:'CDLTASUKIGAP', name:'Tasuki Gap', vi:'Gap Tasuki', cat:'dual',
+    candles:[[2,4,4.2,1.9],[5,7,7.2,4.9],[6.5,4.7,6.7,4.6]],
+    identify:'Nến lớn → gap cùng chiều → nến cùng chiều thứ hai → nến ngược chiều cố lấp gap nhưng KHÔNG lấp được.',
+    meaning:'Gap được giữ — xu hướng chính vẫn còn nguyên, chỉ là điều chỉnh tạm thời.',
+    scope:'Trong xu hướng đang chạy. Tín hiệu tiếp diễn — vào lệnh thuận xu hướng.'},
+
+  {id:'CDLTHRUSTING', name:'Thrusting Pattern', vi:'Đâm Xuyên', cat:'bear',
+    candles:[[8,4,8.1,3.9],[3.4,5.5,5.7,3.3]],
+    identify:'Phiên 1: nến giảm dài. Phiên 2: nến tăng mở dưới đáy nến 1 và đóng cửa trong nửa dưới thân nến 1.',
+    meaning:'Phục hồi không đủ mạnh để đảo chiều (yếu hơn Piercing) — tiếp diễn xu hướng giảm.',
+    scope:'Trong xu hướng giảm. Khác Piercing ở chỗ giá đóng cửa chưa vượt trung điểm — phe mua chưa thắng.'},
+
+  {id:'CDLTRISTAR', name:'Tristar Pattern', vi:'Ba Ngôi Sao (Tristar)', cat:'dual',
+    candles:[[5,5.05,5.3,4.7],[5.6,5.65,5.9,5.3],[5.1,5.15,5.4,4.8]],
+    identify:'Ba nến Doji liên tiếp với nến Doji giữa cao hơn (đỉnh) hoặc thấp hơn (đáy) hai nến hai bên.',
+    meaning:'Sự lưỡng lự kéo dài ba phiên ở vùng cực đoan — đảo chiều mạnh sắp xảy ra.',
+    scope:'Cực kỳ hiếm gặp. Báo hiệu đảo chiều rất mạnh khi xuất hiện sau xu hướng dài.'},
+
+  {id:'CDLUNIQUE3RIVER', name:'Unique 3 River', vi:'Ba Dòng Sông', cat:'bull',
+    candles:[[8,5,8.1,4.9],[6,4.5,6.2,3.5],[4.8,5.3,5.4,4.7]],
+    identify:'Nến giảm dài → nến giảm thứ hai có đáy thấp hơn nến 1 nhưng đóng cao hơn → nến tăng nhỏ mở thấp hơn đáy nến 2.',
+    meaning:'Mẫu đáy hiếm và phức tạp — báo hiệu đảo chiều tăng sau khi áp lực bán cuối cùng cạn kiệt.',
+    scope:'Đáy xu hướng giảm. Rất hiếm gặp; cần xác nhận thêm bằng nến tiếp theo.'},
+
+  {id:'CDLUPSIDEGAP2CROWS', name:'Upside Gap Two Crows', vi:'Hai Quạ Gap Lên', cat:'bear',
+    candles:[[2,6,6.2,1.9],[7,6.5,7.2,6.3],[7.5,5.5,7.7,5.4]],
+    identify:'Nến tăng dài → nến giảm gap-up nhỏ → nến giảm thứ hai bao trùm nến 2 nhưng vẫn đóng trên đỉnh nến 1.',
+    meaning:'Gap-up không được giữ — phe bán đang dần kéo giá xuống, dù chưa lấp gap.',
+    scope:'Đỉnh xu hướng tăng. Tín hiệu cảnh báo, cần nến giảm tiếp theo lấp gap để xác nhận.'},
+
+  {id:'CDLXSIDEGAP3METHODS', name:'Upside/Downside Gap Three Methods', vi:'Ba Bước Có Gap', cat:'dual',
+    candles:[[2,5,5.2,1.9],[6,8,8.2,5.9],[7.8,3,8,2.9]],
+    identify:'Hai nến cùng chiều với gap giữa → nến ngược chiều thứ ba bao trùm cả hai nến và lấp gap.',
+    meaning:'Mặc dù gap bị lấp, đây vẫn được phân loại là pattern tiếp diễn xu hướng cũ trong phân tích cổ điển.',
+    scope:'Trong xu hướng đang chạy. Cần thận trọng vì tín hiệu trái ngược trực giác — kiểm chứng bằng context.'}
+];
+
+/* ============================================================
+   SVG CANDLE RENDERER
+   ============================================================ */
+function renderCandles(candles){
+  const W = 50;          // width per candle slot
+  const PAD_X = 18;
+  const PAD_Y = 16;
+  const H = 170;
+  const bodyW = 22;
+
+  const allValues = candles.flatMap(c => [c[2], c[3]]);
+  let yMin = Math.min(...allValues);
+  let yMax = Math.max(...allValues);
+  const range = yMax - yMin;
+  yMin -= range * 0.08;
+  yMax += range * 0.08;
+
+  const totalW = candles.length * W + 2 * PAD_X;
+  const yScale = v => PAD_Y + ((yMax - v) / (yMax - yMin)) * (H - 2 * PAD_Y);
+
+  let svg = `<svg viewBox="0 0 ${totalW} ${H}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">`;
+
+  candles.forEach((c, i) => {
+    const [o, cl, h, l] = c;
+    const cx = PAD_X + i * W + W/2;
+    const isBull = cl > o;
+    const isDoji = Math.abs(cl - o) < 0.15;
+    const bodyTop = Math.max(o, cl);
+    const bodyBottom = Math.min(o, cl);
+    const fillColor = isBull ? 'var(--bull)' : 'var(--bear)';
+    const strokeColor = isBull ? 'var(--bull)' : 'var(--bear)';
+
+    // wick
+    svg += `<line x1="${cx}" y1="${yScale(h)}" x2="${cx}" y2="${yScale(l)}" stroke="${strokeColor}" stroke-width="1.4" stroke-linecap="round"/>`;
+
+    if(isDoji){
+      // doji: horizontal line for body
+      svg += `<line x1="${cx - bodyW/2}" y1="${yScale(o)}" x2="${cx + bodyW/2}" y2="${yScale(o)}" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round"/>`;
+    } else {
+      const yt = yScale(bodyTop);
+      const yb = yScale(bodyBottom);
+      const height = Math.max(yb - yt, 1);
+      // bull: hollow with bull color stroke; bear: filled
+      if(isBull){
+        svg += `<rect x="${cx - bodyW/2}" y="${yt}" width="${bodyW}" height="${height}" fill="var(--paper)" stroke="${strokeColor}" stroke-width="1.6"/>`;
+      } else {
+        svg += `<rect x="${cx - bodyW/2}" y="${yt}" width="${bodyW}" height="${height}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="1.6"/>`;
+      }
+    }
+  });
+
+  svg += '</svg>';
+  return svg;
+}
+
+/* ============================================================
+   CARD RENDERING & FILTERING
+   ============================================================ */
+const grid = document.getElementById('grid');
+const visibleCountEl = document.getElementById('visibleCount');
+const totalCountEl = document.getElementById('totalCount');
+const searchInput = document.getElementById('searchInput');
+const filterNav = document.getElementById('filterNav');
+
+let activeCat = 'all';
+let activeSearch = '';
+
+const catLabels = {
+  bull: 'Tăng giá',
+  bear: 'Giảm giá',
+  dual: 'Hai chiều',
+  neutral: 'Trung tính'
+};
+
+function buildCard(p, idx){
+  const num = String(idx + 1).padStart(2,'0');
+  return `
+    <article class="card" data-cat="${p.cat}" data-search="${(p.id + ' ' + p.name + ' ' + p.vi).toLowerCase()}">
+      <div class="card-head">
+        <span class="card-num">№ ${num} / 61</span>
+        <span class="card-cat ${p.cat}">${catLabels[p.cat]}</span>
+      </div>
+      <h2 class="card-title">${p.name}</h2>
+      <p class="card-vi">${p.vi}</p>
+      <p class="card-id">${p.id}</p>
+      <div class="candle-stage">${renderCandles(p.candles)}</div>
+      <div class="info">
+        <div class="info-row">
+          <span class="info-label">Đặc điểm nhận dạng</span>
+          <p>${p.identify}</p>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Ý nghĩa giao dịch</span>
+          <p>${p.meaning}</p>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Phạm vi áp dụng</span>
+          <p>${p.scope}</p>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function render(){
+  grid.innerHTML = patterns.map((p,i) => buildCard(p, i)).join('');
+  totalCountEl.textContent = patterns.length;
+  applyFilter();
+}
+
+function applyFilter(){
+  const cards = grid.querySelectorAll('article.card');
+  let visible = 0;
+  cards.forEach(card => {
+    const matchesCat = activeCat === 'all' || card.dataset.cat === activeCat;
+    const matchesSearch = !activeSearch || card.dataset.search.includes(activeSearch);
+    const show = matchesCat && matchesSearch;
+    card.style.display = show ? '' : 'none';
+    if(show) visible++;
+  });
+  visibleCountEl.textContent = visible;
+
+  // No results message
+  let nr = grid.querySelector('.no-results');
+  if(visible === 0){
+    if(!nr){
+      nr = document.createElement('div');
+      nr.className = 'no-results';
+      nr.textContent = '— Không tìm thấy mẫu hình phù hợp —';
+      grid.appendChild(nr);
+    }
+  } else if(nr){
+    nr.remove();
+  }
+}
+
+filterNav.addEventListener('click', e => {
+  const btn = e.target.closest('.chip');
+  if(!btn) return;
+  filterNav.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  activeCat = btn.dataset.cat;
+  applyFilter();
+});
+
+searchInput.addEventListener('input', e => {
+  activeSearch = e.target.value.trim().toLowerCase();
+  applyFilter();
+});
+
+render();
+</script>
+</body>
+</html>
